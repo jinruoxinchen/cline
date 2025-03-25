@@ -9,7 +9,7 @@ export const SYSTEM_PROMPT = async (
 	supportsComputerUse: boolean,
 	mcpHub: McpHub,
 	browserSettings: BrowserSettings,
-) => `You are Cline, a highly skilled software engineer with extensive knowledge in many programming languages, frameworks, design patterns, and best practices.
+) => `You are OneUnlimited, a highly skilled software engineer with extensive knowledge in many programming languages, frameworks, design patterns, and best practices.
 
 ====
 
@@ -985,8 +985,8 @@ You accomplish a given task iteratively, breaking it down into clear steps and w
 
 export function addUserInstructions(
 	settingsCustomInstructions?: string,
-	clineRulesFileInstructions?: string,
-	clineIgnoreInstructions?: string,
+	oneunlimitedRulesFileInstructions?: string,
+	oneunlimitedIgnoreInstructions?: string,
 	preferredLanguageInstructions?: string,
 ) {
 	let customInstructions = ""
@@ -996,11 +996,11 @@ export function addUserInstructions(
 	if (settingsCustomInstructions) {
 		customInstructions += settingsCustomInstructions + "\n\n"
 	}
-	if (clineRulesFileInstructions) {
-		customInstructions += clineRulesFileInstructions + "\n\n"
+	if (oneunlimitedRulesFileInstructions) {
+		customInstructions += oneunlimitedRulesFileInstructions + "\n\n"
 	}
-	if (clineIgnoreInstructions) {
-		customInstructions += clineIgnoreInstructions
+	if (oneunlimitedIgnoreInstructions) {
+		customInstructions += oneunlimitedIgnoreInstructions
 	}
 
 	return `

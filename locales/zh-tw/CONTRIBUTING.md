@@ -1,22 +1,22 @@
-# 貢獻於 Cline
+# 貢獻於 OneUnlimited
 
-我們很高興您有興趣為 Cline 做出貢獻。無論您是修復錯誤、添加功能還是改進我們的文檔，每一個貢獻都讓 Cline 更加智能！為了保持我們的社區充滿活力和歡迎，所有成員必須遵守我們的[行為準則](CODE_OF_CONDUCT.md)。
+我們很高興您有興趣為 OneUnlimited 做出貢獻。無論您是修復錯誤、添加功能還是改進我們的文檔，每一個貢獻都讓 OneUnlimited 更加智能！為了保持我們的社區充滿活力和歡迎，所有成員必須遵守我們的[行為準則](CODE_OF_CONDUCT.md)。
 
 ## 報告錯誤或問題
 
-錯誤報告有助於讓 Cline 對每個人都更好！在創建新問題之前，請[搜索現有問題](https://github.com/cline/cline/issues)以避免重複。當您準備報告錯誤時，請前往我們的[問題頁面](https://github.com/cline/cline/issues/new/choose)，您會找到一個模板來幫助您填寫相關信息。
+錯誤報告有助於讓 OneUnlimited 對每個人都更好！在創建新問題之前，請[搜索現有問題](https://github.com/oneunlimited/oneunlimited/issues)以避免重複。當您準備報告錯誤時，請前往我們的[問題頁面](https://github.com/oneunlimited/oneunlimited/issues/new/choose)，您會找到一個模板來幫助您填寫相關信息。
 
 <blockquote class='warning-note'>
-    🔐 <b>重要：</b> 如果您發現安全漏洞，請使用<a href="https://github.com/cline/cline/security/advisories/new">Github 安全工具私下報告</a>。
+    🔐 <b>重要：</b> 如果您發現安全漏洞，請使用<a href="https://github.com/oneunlimited/oneunlimited/security/advisories/new">Github 安全工具私下報告</a>。
 </blockquote>
 
 ## 決定要做什麼
 
-尋找一個好的首次貢獻？查看標有["good first issue"](https://github.com/cline/cline/labels/good%20first%20issue)或["help wanted"](https://github.com/cline/cline/labels/help%20wanted)的問題。這些是專門為新貢獻者和我們希望得到幫助的領域策劃的！
+尋找一個好的首次貢獻？查看標有["good first issue"](https://github.com/oneunlimited/oneunlimited/labels/good%20first%20issue)或["help wanted"](https://github.com/oneunlimited/oneunlimited/labels/help%20wanted)的問題。這些是專門為新貢獻者和我們希望得到幫助的領域策劃的！
 
-我們也歡迎對我們[文檔](https://github.com/cline/cline/tree/main/docs)的貢獻！無論是修正錯別字、改進現有指南還是創建新的教育內容 - 我們希望建立一個由社區驅動的資源庫，幫助每個人充分利用 Cline。您可以從深入研究 `/docs` 並尋找需要改進的領域開始。
+我們也歡迎對我們[文檔](https://github.com/oneunlimited/oneunlimited/tree/main/docs)的貢獻！無論是修正錯別字、改進現有指南還是創建新的教育內容 - 我們希望建立一個由社區驅動的資源庫，幫助每個人充分利用 OneUnlimited。您可以從深入研究 `/docs` 並尋找需要改進的領域開始。
 
-如果您計劃開發一個更大的功能，請先創建一個[功能請求](https://github.com/cline/cline/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+Requests%22+sort%3Atop)，以便我們討論它是否符合 Cline 的願景。
+如果您計劃開發一個更大的功能，請先創建一個[功能請求](https://github.com/oneunlimited/oneunlimited/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+Requests%22+sort%3Atop)，以便我們討論它是否符合 OneUnlimited 的願景。
 
 ## 開發設置
 
@@ -33,7 +33,7 @@
 
 ## 編寫和提交代碼
 
-任何人都可以為 Cline 貢獻代碼，但我們要求您遵循以下指南，以確保您的貢獻能夠順利集成：
+任何人都可以為 OneUnlimited 貢獻代碼，但我們要求您遵循以下指南，以確保您的貢獻能夠順利集成：
 
 1. **保持 Pull Requests 集中**
 
@@ -79,4 +79,4 @@
 
 通過提交 pull request，您同意您的貢獻將根據與項目相同的許可證（[Apache 2.0](LICENSE)）進行許可。
 
-記住：貢獻於 Cline 不僅僅是編寫代碼 - 這是關於成為一個塑造 AI 輔助開發未來的社區的一部分。讓我們一起創造一些驚人的東西！🚀
+記住：貢獻於 OneUnlimited 不僅僅是編寫代碼 - 這是關於成為一個塑造 AI 輔助開發未來的社區的一部分。讓我們一起創造一些驚人的東西！🚀

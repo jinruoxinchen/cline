@@ -3,7 +3,7 @@ import * as vscode from "vscode"
 import { version as extensionVersion } from "../../../package.json"
 
 /**
- * PostHogClient handles telemetry event tracking for the Cline extension
+ * PostHogClient handles telemetry event tracking for the OneUnlimited extension
  * Uses PostHog analytics to track user interactions and system events
  * Respects user privacy settings and VSCode's global telemetry configuration
  */
@@ -156,7 +156,7 @@ class PostHogClient {
 	}
 
 	/**
-	 * Records when cline calls the task completion_result tool signifying that cline is done with the task
+	 * Records when oneunlimited calls the task completion_result tool signifying that oneunlimited is done with the task
 	 * @param taskId Unique identifier for the task
 	 */
 	public captureTaskCompleted(taskId: string) {

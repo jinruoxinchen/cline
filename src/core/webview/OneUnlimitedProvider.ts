@@ -25,10 +25,10 @@ import { ChatSettings, DEFAULT_CHAT_SETTINGS } from "../../shared/ChatSettings"
 import { ExtensionMessage, ExtensionState, Invoke, Platform } from "../../shared/ExtensionMessage"
 import { HistoryItem } from "../../shared/HistoryItem"
 import { McpDownloadResponse, McpMarketplaceCatalog, McpServer } from "../../shared/mcp"
-import { ClineCheckpointRestore, WebviewMessage } from "../../shared/WebviewMessage"
+import { OneUnlimitedCheckpointRestore, WebviewMessage } from "../../shared/WebviewMessage"
 import { fileExistsAtPath } from "../../utils/fs"
 import { searchCommits } from "../../utils/git"
-import { Cline } from "../Cline"
+import { OneUnlimited } from "../OneUnlimited"
 import { openMention } from "../mentions"
 import { getNonce } from "./getNonce"
 import { getUri } from "./getUri"
@@ -48,7 +48,7 @@ https://github.com/KumarVariable/vscode-extension-sidebar-html/blob/master/src/c
 
 type SecretKey =
 	| "apiKey"
-	| "clineApiKey"
+	| "oneunlimitedApiKey"
 	| "openRouterApiKey"
 	| "awsAccessKey"
 	| "awsSecretKey"
@@ -112,13 +112,13 @@ type GlobalStateKey =
 	| "thinkingBudgetTokens"
 	| "planActSeparateModelsSetting"
 
-export class ClineProvider implements vscode.WebviewViewProvider {
+export class OneUnlimitedProvider implements vscode.WebviewViewProvider {
 	public static readonly sideBarId = "claude-dev.SidebarProvider" // used in package.json as the view's id. This value cannot be changed due to how vscode caches views based on their id, and updating the id would break existing instances of the extension.
 	public static readonly tabPanelId = "claude-dev.TabPanelProvider"
-	private static activeInstances: Set<ClineProvider> = new Set()
+	private static activeInstances: Set<OneUnlimitedProvider> = new Set()
 	private disposables: vscode.Disposable[] = []
 	private view?: vscode.WebviewView | vscode.WebviewPanel
-	private cline?: Cline
+	private oneunlimited?: OneUnlimited
 	workspaceTracker?: WorkspaceTracker
 	mcpHub?: McpHub
 	private latestAnnouncementId = "feb-19-2025" // update to some unique identifier when we add a new announcement
@@ -128,8 +128,8 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 		readonly context: vscode.ExtensionContext,
 		private readonly outputChannel: vscode.OutputChannel,
 	) {
-		this.outputChannel.appendLine("ClineProvider instantiated")
-		ClineProvider.activeInstances.add(this)
+		this.outputChannel.appendLine("OneUnlimitedProvider instantiated")
+		OneUnlimitedProvider.activeInstances.add(this)
 		this.workspaceTracker = new WorkspaceTracker(this)
 		this.mcpHub = new McpHub(this)
 		this.conversationTelemetryService = new ConversationTelemetryService(this)
@@ -146,7 +146,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 	- https://github.com/microsoft/vscode-extension-samples/blob/main/webview-sample/src/extension.ts
 	*/
 	async dispose() {
-		this.outputChannel.appendLine("Disposing ClineProvider...")
+		this.outputChannel.appendLine("Disposing OneUnlimitedProvider...")
 		await this.clearTask()
 		this.outputChannel.appendLine("Cleared task")
 		if (this.view && "dispose" in this.view) {
@@ -165,16 +165,16 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 		this.mcpHub = undefined
 		this.conversationTelemetryService.shutdown()
 		this.outputChannel.appendLine("Disposed all disposables")
-		ClineProvider.activeInstances.delete(this)
+		OneUnlimitedProvider.activeInstances.delete(this)
 	}
 
 	// Auth methods
 	async handleSignOut() {
 		try {
-			await this.storeSecret("clineApiKey", undefined)
+			await this.storeSecret("oneunlimitedApiKey", undefined)
 			await this.updateGlobalState("apiProvider", "openrouter")
 			await this.postStateToWebview()
-			vscode.window.showInformationMessage("Successfully logged out of Cline")
+			vscode.window.showInformationMessage("Successfully logged out of OneUnlimited")
 		} catch (error) {
 			vscode.window.showErrorMessage("Logout failed")
 		}
@@ -184,7 +184,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 		await this.updateGlobalState("userInfo", info)
 	}
 
-	public static getVisibleInstance(): ClineProvider | undefined {
+	public static getVisibleInstance(): OneUnlimitedProvider | undefined {
 		return findLast(Array.from(this.activeInstances), (instance) => instance.view?.visible === true)
 	}
 
@@ -263,7 +263,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 						text: JSON.stringify(await getTheme()),
 					})
 				}
-				if (e && e.affectsConfiguration("cline.mcpMarketplace.enabled")) {
+				if (e && e.affectsConfiguration("oneunlimited.mcpMarketplace.enabled")) {
 					// Update state when marketplace tab setting changes
 					await this.postStateToWebview()
 				}
@@ -278,11 +278,11 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 		this.outputChannel.appendLine("Webview view resolved")
 	}
 
-	async initClineWithTask(task?: string, images?: string[]) {
+	async initOneUnlimitedWithTask(task?: string, images?: string[]) {
 		await this.clearTask() // ensures that an existing task doesn't exist before starting a new one, although this shouldn't be possible since user must clear task before starting a new one
 		const { apiConfiguration, customInstructions, autoApprovalSettings, browserSettings, chatSettings } =
 			await this.getState()
-		this.cline = new Cline(
+		this.oneunlimited = new OneUnlimited(
 			this,
 			apiConfiguration,
 			autoApprovalSettings,
@@ -294,11 +294,11 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 		)
 	}
 
-	async initClineWithHistoryItem(historyItem: HistoryItem) {
+	async initOneUnlimitedWithHistoryItem(historyItem: HistoryItem) {
 		await this.clearTask()
 		const { apiConfiguration, customInstructions, autoApprovalSettings, browserSettings, chatSettings } =
 			await this.getState()
-		this.cline = new Cline(
+		this.oneunlimited = new OneUnlimited(
 			this,
 			apiConfiguration,
 			autoApprovalSettings,
@@ -380,7 +380,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
             <link rel="stylesheet" type="text/css" href="${stylesUri}">
             <link href="${codiconsUri}" rel="stylesheet" />
 						<meta http-equiv="Content-Security-Policy" content="default-src 'none'; connect-src https://*.posthog.com https://*.firebaseauth.com https://*.firebaseio.com https://*.googleapis.com https://*.firebase.com; font-src ${webview.cspSource}; style-src ${webview.cspSource} 'unsafe-inline'; img-src ${webview.cspSource} https: data:; script-src 'nonce-${nonce}' 'unsafe-eval';">
-            <title>Cline</title>
+            <title>OneUnlimited</title>
           </head>
           <body>
             <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -407,7 +407,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 			await axios.get(`http://${localServerUrl}`)
 		} catch (error) {
 			vscode.window.showErrorMessage(
-				"Cline: Local webview dev server is not running, HMR will not work. Please run 'npm run dev:webview' before launching the extension to enable HMR. Using bundled assets.",
+				"OneUnlimited: Local webview dev server is not running, HMR will not work. Please run 'npm run dev:webview' before launching the extension to enable HMR. Using bundled assets.",
 			)
 
 			return this.getHtmlContent(webview)
@@ -454,7 +454,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 					<meta http-equiv="Content-Security-Policy" content="${csp.join("; ")}">
 					<link rel="stylesheet" type="text/css" href="${stylesUri}">
 					<link href="${codiconsUri}" rel="stylesheet" />
-					<title>Cline</title>
+					<title>OneUnlimited</title>
 				</head>
 				<body>
 					<div id="root"></div>
@@ -540,8 +540,8 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 						// You can send any JSON serializable data.
 						// Could also do this in extension .ts
 						//this.postMessageToWebview({ type: "text", text: `Extension: ${Date.now()}` })
-						// initializing new instance of Cline will make sure that any agentically running promises in old instance don't affect our new task. this essentially creates a fresh slate for the new task
-						await this.initClineWithTask(message.text, message.images)
+						// initializing new instance of OneUnlimited will make sure that any agentically running promises in old instance don't affect our new task. this essentially creates a fresh slate for the new task
+						await this.initOneUnlimitedWithTask(message.text, message.images)
 						break
 					case "apiConfiguration":
 						if (message.apiConfiguration) {
@@ -552,8 +552,8 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 					case "autoApprovalSettings":
 						if (message.autoApprovalSettings) {
 							await this.updateGlobalState("autoApprovalSettings", message.autoApprovalSettings)
-							if (this.cline) {
-								this.cline.autoApprovalSettings = message.autoApprovalSettings
+							if (this.oneunlimited) {
+								this.oneunlimited.autoApprovalSettings = message.autoApprovalSettings
 							}
 							await this.postStateToWebview()
 						}
@@ -561,8 +561,8 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 					case "browserSettings":
 						if (message.browserSettings) {
 							await this.updateGlobalState("browserSettings", message.browserSettings)
-							if (this.cline) {
-								this.cline.updateBrowserSettings(message.browserSettings)
+							if (this.oneunlimited) {
+								this.oneunlimited.updateBrowserSettings(message.browserSettings)
 							}
 							await this.postStateToWebview()
 						}
@@ -580,12 +580,12 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 						})
 						break
 					// case "relaunchChromeDebugMode":
-					// 	if (this.cline) {
-					// 		this.cline.browserSession.relaunchChromeDebugMode()
+					// 	if (this.oneunlimited) {
+					// 		this.oneunlimited.browserSession.relaunchChromeDebugMode()
 					// 	}
 					// 	break
 					case "askResponse":
-						this.cline?.handleWebviewAskResponse(message.askResponse!, message.text, message.images)
+						this.oneunlimited?.handleWebviewAskResponse(message.askResponse!, message.text, message.images)
 						break
 					case "clearTask":
 						// newTask will start a new task with a given task text, while clear task resets the current session and allows for a new task to be started
@@ -604,7 +604,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 						})
 						break
 					case "exportCurrentTask":
-						const currentTaskId = this.cline?.taskId
+						const currentTaskId = this.oneunlimited?.taskId
 						if (currentTaskId) {
 							this.exportTaskWithId(currentTaskId)
 						}
@@ -672,28 +672,31 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 						break
 					case "checkpointDiff": {
 						if (message.number) {
-							await this.cline?.presentMultifileDiff(message.number, false)
+							await this.oneunlimited?.presentMultifileDiff(message.number, false)
 						}
 						break
 					}
 					case "checkpointRestore": {
 						await this.cancelTask() // we cannot alter message history say if the task is active, as it could be in the middle of editing a file or running a command, which expect the ask to be responded to rather than being superceded by a new message eg add deleted_api_reqs
-						// cancel task waits for any open editor to be reverted and starts a new cline instance
+						// cancel task waits for any open editor to be reverted and starts a new oneunlimited instance
 						if (message.number) {
 							// wait for messages to be loaded
-							await pWaitFor(() => this.cline?.isInitialized === true, {
+							await pWaitFor(() => this.oneunlimited?.isInitialized === true, {
 								timeout: 3_000,
 							}).catch(() => {
-								console.error("Failed to init new cline instance")
+								console.error("Failed to init new oneunlimited instance")
 							})
 							// NOTE: cancelTask awaits abortTask, which awaits diffViewProvider.revertChanges, which reverts any edited files, allowing us to reset to a checkpoint rather than running into a state where the revertChanges function is called alongside or after the checkpoint reset
-							await this.cline?.restoreCheckpoint(message.number, message.text! as ClineCheckpointRestore)
+							await this.oneunlimited?.restoreCheckpoint(
+								message.number,
+								message.text! as OneUnlimitedCheckpointRestore,
+							)
 						}
 						break
 					}
 					case "taskCompletionViewChanges": {
 						if (message.number) {
-							await this.cline?.presentMultifileDiff(message.number, true)
+							await this.oneunlimited?.presentMultifileDiff(message.number, true)
 						}
 						break
 					}
@@ -715,7 +718,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 						const uriScheme = vscode.env.uriScheme
 
 						const authUrl = vscode.Uri.parse(
-							`https://app.cline.bot/auth?state=${encodeURIComponent(nonce)}&callback_url=${encodeURIComponent(`${uriScheme || "vscode"}://saoudrizwan.claude-dev/auth`)}`,
+							`https://app.oneunlimited.bot/auth?state=${encodeURIComponent(nonce)}&callback_url=${encodeURIComponent(`${uriScheme || "vscode"}://saoudrizwan.claude-dev/auth`)}`,
 						)
 						vscode.env.openExternal(authUrl)
 						break
@@ -749,7 +752,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 
 							// 2. Enable MCP settings if disabled
 							// Enable MCP mode if disabled
-							const mcpConfig = vscode.workspace.getConfiguration("cline.mcp")
+							const mcpConfig = vscode.workspace.getConfiguration("oneunlimited.mcp")
 							if (mcpConfig.get<string>("mode") !== "full") {
 								await mcpConfig.update("mode", "full", true)
 							}
@@ -765,7 +768,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 					}
 					// case "openMcpMarketplaceServerDetails": {
 					// 	if (message.text) {
-					// 		const response = await fetch(`https://api.cline.bot/v1/mcp/marketplace/item?mcpId=${message.mcpId}`)
+					// 		const response = await fetch(`https://api.oneunlimited.bot/v1/mcp/marketplace/item?mcpId=${message.mcpId}`)
 					// 		const details: McpDownloadResponse = await response.json()
 
 					// 		if (details.readmeContent) {
@@ -942,7 +945,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 		const didSwitchToActMode = chatSettings.mode === "act"
 
 		// Capture mode switch telemetry | Capture regardless of if we know the taskId
-		telemetryService.captureModeSwitch(this.cline?.taskId ?? "0", chatSettings.mode)
+		telemetryService.captureModeSwitch(this.oneunlimited?.taskId ?? "0", chatSettings.mode)
 
 		// Get previous model info that we will revert to after saving current mode api info
 		const {
@@ -972,7 +975,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 					await this.updateGlobalState("previousModeModelId", apiConfiguration.apiModelId)
 					break
 				case "openrouter":
-				case "cline":
+				case "oneunlimited":
 					await this.updateGlobalState("previousModeModelId", apiConfiguration.openRouterModelId)
 					await this.updateGlobalState("previousModeModelInfo", apiConfiguration.openRouterModelInfo)
 					break
@@ -1013,7 +1016,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 						await this.updateGlobalState("apiModelId", newModelId)
 						break
 					case "openrouter":
-					case "cline":
+					case "oneunlimited":
 						await this.updateGlobalState("openRouterModelId", newModelId)
 						await this.updateGlobalState("openRouterModelInfo", newModelInfo)
 						break
@@ -1038,9 +1041,9 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 						break
 				}
 
-				if (this.cline) {
+				if (this.oneunlimited) {
 					const { apiConfiguration: updatedApiConfiguration } = await this.getState()
-					this.cline.api = buildApiHandler(updatedApiConfiguration)
+					this.oneunlimited.api = buildApiHandler(updatedApiConfiguration)
 				}
 			}
 		}
@@ -1048,10 +1051,10 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 		await this.updateGlobalState("chatSettings", chatSettings)
 		await this.postStateToWebview()
 
-		if (this.cline) {
-			this.cline.updateChatSettings(chatSettings)
-			if (this.cline.isAwaitingPlanResponse && didSwitchToActMode) {
-				this.cline.didRespondToPlanAskBySwitchingMode = true
+		if (this.oneunlimited) {
+			this.oneunlimited.updateChatSettings(chatSettings)
+			if (this.oneunlimited.isAwaitingPlanResponse && didSwitchToActMode) {
+				this.oneunlimited.didRespondToPlanAskBySwitchingMode = true
 				// Use chatContent if provided, otherwise use default message
 				await this.postMessageToWebview({
 					type: "invoke",
@@ -1066,39 +1069,39 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 	}
 
 	async cancelTask() {
-		if (this.cline) {
-			const { historyItem } = await this.getTaskWithId(this.cline.taskId)
+		if (this.oneunlimited) {
+			const { historyItem } = await this.getTaskWithId(this.oneunlimited.taskId)
 			try {
-				await this.cline.abortTask()
+				await this.oneunlimited.abortTask()
 			} catch (error) {
 				console.error("Failed to abort task", error)
 			}
 			await pWaitFor(
 				() =>
-					this.cline === undefined ||
-					this.cline.isStreaming === false ||
-					this.cline.didFinishAbortingStream ||
-					this.cline.isWaitingForFirstChunk, // if only first chunk is processed, then there's no need to wait for graceful abort (closes edits, browser, etc)
+					this.oneunlimited === undefined ||
+					this.oneunlimited.isStreaming === false ||
+					this.oneunlimited.didFinishAbortingStream ||
+					this.oneunlimited.isWaitingForFirstChunk, // if only first chunk is processed, then there's no need to wait for graceful abort (closes edits, browser, etc)
 				{
 					timeout: 3_000,
 				},
 			).catch(() => {
 				console.error("Failed to abort task")
 			})
-			if (this.cline) {
-				// 'abandoned' will prevent this cline instance from affecting future cline instance gui. this may happen if its hanging on a streaming request
-				this.cline.abandoned = true
+			if (this.oneunlimited) {
+				// 'abandoned' will prevent this oneunlimited instance from affecting future oneunlimited instance gui. this may happen if its hanging on a streaming request
+				this.oneunlimited.abandoned = true
 			}
-			await this.initClineWithHistoryItem(historyItem) // clears task again, so we need to abortTask manually above
-			// await this.postStateToWebview() // new Cline instance will post state when it's ready. having this here sent an empty messages array to webview leading to virtuoso having to reload the entire list
+			await this.initOneUnlimitedWithHistoryItem(historyItem) // clears task again, so we need to abortTask manually above
+			// await this.postStateToWebview() // new OneUnlimited instance will post state when it's ready. having this here sent an empty messages array to webview leading to virtuoso having to reload the entire list
 		}
 	}
 
 	async updateCustomInstructions(instructions?: string) {
 		// User may be clearing the field
 		await this.updateGlobalState("customInstructions", instructions || undefined)
-		if (this.cline) {
-			this.cline.customInstructions = instructions || undefined
+		if (this.oneunlimited) {
+			this.oneunlimited.customInstructions = instructions || undefined
 		}
 	}
 
@@ -1150,7 +1153,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 			asksageApiUrl,
 			xaiApiKey,
 			thinkingBudgetTokens,
-			clineApiKey,
+			oneunlimitedApiKey,
 			sambanovaApiKey,
 		} = apiConfiguration
 		await this.updateGlobalState("apiProvider", apiProvider)
@@ -1199,10 +1202,10 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 		await this.storeSecret("asksageApiKey", asksageApiKey)
 		await this.updateGlobalState("asksageApiUrl", asksageApiUrl)
 		await this.updateGlobalState("thinkingBudgetTokens", thinkingBudgetTokens)
-		await this.storeSecret("clineApiKey", clineApiKey)
+		await this.storeSecret("oneunlimitedApiKey", oneunlimitedApiKey)
 		await this.storeSecret("sambanovaApiKey", sambanovaApiKey)
-		if (this.cline) {
-			this.cline.api = buildApiHandler(apiConfiguration)
+		if (this.oneunlimited) {
+			this.oneunlimited.api = buildApiHandler(apiConfiguration)
 		}
 	}
 
@@ -1246,11 +1249,11 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 
 	async ensureMcpServersDirectoryExists(): Promise<string> {
 		const userDocumentsPath = await this.getDocumentsPath()
-		const mcpServersDir = path.join(userDocumentsPath, "Cline", "MCP")
+		const mcpServersDir = path.join(userDocumentsPath, "OneUnlimited", "MCP")
 		try {
 			await fs.mkdir(mcpServersDir, { recursive: true })
 		} catch (error) {
-			return "~/Documents/Cline/MCP" // in case creating a directory in documents fails for whatever reason (e.g. permissions) - this is fine since this path is only ever used in the system prompt
+			return "~/Documents/OneUnlimited/MCP" // in case creating a directory in documents fails for whatever reason (e.g. permissions) - this is fine since this path is only ever used in the system prompt
 		}
 		return mcpServersDir
 	}
@@ -1325,7 +1328,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 	async handleAuthCallback(customToken: string, apiKey: string) {
 		try {
 			// Store API key for API calls
-			await this.storeSecret("clineApiKey", apiKey)
+			await this.storeSecret("oneunlimitedApiKey", apiKey)
 
 			// Send custom token to webview for Firebase auth
 			await this.postMessageToWebview({
@@ -1333,26 +1336,26 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 				customToken,
 			})
 
-			const clineProvider: ApiProvider = "cline"
-			await this.updateGlobalState("apiProvider", clineProvider)
+			const oneunlimitedProvider: ApiProvider = "oneunlimited"
+			await this.updateGlobalState("apiProvider", oneunlimitedProvider)
 
 			// Update API configuration with the new provider and API key
 			const { apiConfiguration } = await this.getState()
 			const updatedConfig = {
 				...apiConfiguration,
-				apiProvider: clineProvider,
-				clineApiKey: apiKey,
+				apiProvider: oneunlimitedProvider,
+				oneunlimitedApiKey: apiKey,
 			}
 
-			if (this.cline) {
-				this.cline.api = buildApiHandler(updatedConfig)
+			if (this.oneunlimited) {
+				this.oneunlimited.api = buildApiHandler(updatedConfig)
 			}
 
 			await this.postStateToWebview()
-			vscode.window.showInformationMessage("Successfully logged in to Cline")
+			vscode.window.showInformationMessage("Successfully logged in to OneUnlimited")
 		} catch (error) {
 			console.error("Failed to handle auth callback:", error)
-			vscode.window.showErrorMessage("Failed to log in to Cline")
+			vscode.window.showErrorMessage("Failed to log in to OneUnlimited")
 			// Even on login failure, we preserve any existing tokens
 			// Only clear tokens on explicit logout
 		}
@@ -1362,7 +1365,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 
 	private async fetchMcpMarketplaceFromApi(silent: boolean = false): Promise<McpMarketplaceCatalog | undefined> {
 		try {
-			const response = await axios.get("https://api.cline.bot/v1/mcp/marketplace", {
+			const response = await axios.get("https://api.oneunlimited.bot/v1/mcp/marketplace", {
 				headers: {
 					"Content-Type": "application/json",
 				},
@@ -1454,7 +1457,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 
 			// Fetch server details from marketplace
 			const response = await axios.post<McpDownloadResponse>(
-				"https://api.cline.bot/v1/mcp/download",
+				"https://api.oneunlimited.bot/v1/mcp/download",
 				{ mcpId },
 				{
 					headers: { "Content-Type": "application/json" },
@@ -1486,7 +1489,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 
 			// Create task with context from README and added guidelines for MCP server installation
 			const task = `Set up the MCP server from ${mcpDetails.githubUrl} while adhering to these MCP server installation rules:
-- Use "${mcpDetails.mcpId}" as the server name in cline_mcp_settings.json.
+- Use "${mcpDetails.mcpId}" as the server name in oneunlimited_mcp_settings.json.
 - Create the directory for the new MCP server before starting installation.
 - Use commands aligned with the user's shell and operating system best practices.
 - The following README may contain instructions that conflict with the user's OS, in which case proceed thoughtfully.
@@ -1494,7 +1497,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 Here is the project's README to help you get started:\n\n${mcpDetails.readmeContent}\n${mcpDetails.llmsInstallationContent}`
 
 			// Initialize task and show chat view
-			await this.initClineWithTask(task)
+			await this.initOneUnlimitedWithTask(task)
 			await this.postMessageToWebview({
 				type: "action",
 				action: "chatButtonClicked",
@@ -1572,8 +1575,8 @@ Here is the project's README to help you get started:\n\n${mcpDetails.readmeCont
 		await this.updateGlobalState("apiProvider", openrouter)
 		await this.storeSecret("openRouterApiKey", apiKey)
 		await this.postStateToWebview()
-		if (this.cline) {
-			this.cline.api = buildApiHandler({
+		if (this.oneunlimited) {
+			this.oneunlimited.api = buildApiHandler({
 				apiProvider: openrouter,
 				openRouterApiKey: apiKey,
 			})
@@ -1753,10 +1756,10 @@ Here is the project's README to help you get started:\n\n${mcpDetails.readmeCont
 	}
 
 	async showTaskWithId(id: string) {
-		if (id !== this.cline?.taskId) {
+		if (id !== this.oneunlimited?.taskId) {
 			// non-current task
 			const { historyItem } = await this.getTaskWithId(id)
-			await this.initClineWithHistoryItem(historyItem) // clears existing task
+			await this.initOneUnlimitedWithHistoryItem(historyItem) // clears existing task
 		}
 		await this.postMessageToWebview({
 			type: "action",
@@ -1808,7 +1811,7 @@ Here is the project's README to help you get started:\n\n${mcpDetails.readmeCont
 		console.info("deleteTaskWithId: ", id)
 
 		try {
-			if (id === this.cline?.taskId) {
+			if (id === this.oneunlimited?.taskId) {
 				await this.clearTask()
 				console.debug("cleared task")
 			}
@@ -1880,9 +1883,11 @@ Here is the project's README to help you get started:\n\n${mcpDetails.readmeCont
 			apiConfiguration,
 			customInstructions,
 			uriScheme: vscode.env.uriScheme,
-			currentTaskItem: this.cline?.taskId ? (taskHistory || []).find((item) => item.id === this.cline?.taskId) : undefined,
-			checkpointTrackerErrorMessage: this.cline?.checkpointTrackerErrorMessage,
-			clineMessages: this.cline?.clineMessages || [],
+			currentTaskItem: this.oneunlimited?.taskId
+				? (taskHistory || []).find((item) => item.id === this.oneunlimited?.taskId)
+				: undefined,
+			checkpointTrackerErrorMessage: this.oneunlimited?.checkpointTrackerErrorMessage,
+			oneunlimitedMessages: this.oneunlimited?.oneunlimitedMessages || [],
 			taskHistory: (taskHistory || [])
 				.filter((item) => item.ts && item.task)
 				.sort((a, b) => b.ts - a.ts)
@@ -1901,19 +1906,19 @@ Here is the project's README to help you get started:\n\n${mcpDetails.readmeCont
 	}
 
 	async clearTask() {
-		this.cline?.abortTask()
-		this.cline = undefined // removes reference to it, so once promises end it will be garbage collected
+		this.oneunlimited?.abortTask()
+		this.oneunlimited = undefined // removes reference to it, so once promises end it will be garbage collected
 	}
 
 	// Caching mechanism to keep track of webview messages + API conversation history per provider instance
 
 	/*
-	Now that we use retainContextWhenHidden, we don't have to store a cache of cline messages in the user's state, but we could to reduce memory footprint in long conversations.
+	Now that we use retainContextWhenHidden, we don't have to store a cache of oneunlimited messages in the user's state, but we could to reduce memory footprint in long conversations.
 
-	- We have to be careful of what state is shared between ClineProvider instances since there could be multiple instances of the extension running at once. For example when we cached cline messages using the same key, two instances of the extension could end up using the same key and overwriting each other's messages.
+	- We have to be careful of what state is shared between OneUnlimitedProvider instances since there could be multiple instances of the extension running at once. For example when we cached oneunlimited messages using the same key, two instances of the extension could end up using the same key and overwriting each other's messages.
 	- Some state does need to be shared between the instances, i.e. the API key--however there doesn't seem to be a good way to notify the other instances that the API key has changed.
 
-	We need to use a unique identifier for each ClineProvider instance's message cache since we could be running several instances of the extension outside of just the sidebar i.e. in editor panels.
+	We need to use a unique identifier for each OneUnlimitedProvider instance's message cache since we could be running several instances of the extension outside of just the sidebar i.e. in editor panels.
 
 	// conversation history to send in API requests
 
@@ -1957,7 +1962,7 @@ Here is the project's README to help you get started:\n\n${mcpDetails.readmeCont
 			apiModelId,
 			apiKey,
 			openRouterApiKey,
-			clineApiKey,
+			oneunlimitedApiKey,
 			awsAccessKey,
 			awsSecretKey,
 			awsSessionToken,
@@ -2019,7 +2024,7 @@ Here is the project's README to help you get started:\n\n${mcpDetails.readmeCont
 			this.getGlobalState("apiModelId") as Promise<string | undefined>,
 			this.getSecret("apiKey") as Promise<string | undefined>,
 			this.getSecret("openRouterApiKey") as Promise<string | undefined>,
-			this.getSecret("clineApiKey") as Promise<string | undefined>,
+			this.getSecret("oneunlimitedApiKey") as Promise<string | undefined>,
 			this.getSecret("awsAccessKey") as Promise<string | undefined>,
 			this.getSecret("awsSecretKey") as Promise<string | undefined>,
 			this.getSecret("awsSessionToken") as Promise<string | undefined>,
@@ -2093,10 +2098,12 @@ Here is the project's README to help you get started:\n\n${mcpDetails.readmeCont
 		}
 
 		const o3MiniReasoningEffort = vscode.workspace
-			.getConfiguration("cline.modelSettings.o3Mini")
+			.getConfiguration("oneunlimited.modelSettings.o3Mini")
 			.get("reasoningEffort", "medium")
 
-		const mcpMarketplaceEnabled = vscode.workspace.getConfiguration("cline").get<boolean>("mcpMarketplace.enabled", true)
+		const mcpMarketplaceEnabled = vscode.workspace
+			.getConfiguration("oneunlimited")
+			.get<boolean>("mcpMarketplace.enabled", true)
 
 		// Plan/Act separate models setting is a boolean indicating whether the user wants to use different models for plan and act. Existing users expect this to be enabled, while we want new users to opt in to this being disabled by default.
 		// On win11 state sometimes initializes as empty string instead of undefined
@@ -2122,7 +2129,7 @@ Here is the project's README to help you get started:\n\n${mcpDetails.readmeCont
 				apiModelId,
 				apiKey,
 				openRouterApiKey,
-				clineApiKey,
+				oneunlimitedApiKey,
 				awsAccessKey,
 				awsSecretKey,
 				awsSessionToken,
@@ -2309,7 +2316,7 @@ Here is the project's README to help you get started:\n\n${mcpDetails.readmeCont
 			"togetherApiKey",
 			"qwenApiKey",
 			"mistralApiKey",
-			"clineApiKey",
+			"oneunlimitedApiKey",
 			"liteLlmApiKey",
 			"asksageApiKey",
 			"xaiApiKey",
@@ -2318,9 +2325,9 @@ Here is the project's README to help you get started:\n\n${mcpDetails.readmeCont
 		for (const key of secretKeys) {
 			await this.storeSecret(key, undefined)
 		}
-		if (this.cline) {
-			this.cline.abortTask()
-			this.cline = undefined
+		if (this.oneunlimited) {
+			this.oneunlimited.abortTask()
+			this.oneunlimited = undefined
 		}
 		vscode.window.showInformationMessage("State reset")
 		await this.postStateToWebview()

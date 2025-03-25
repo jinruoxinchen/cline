@@ -266,13 +266,13 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 							marginTop: "5px",
 							color: "var(--vscode-descriptionForeground)",
 						}}>
-						Help improve Cline by sending anonymous usage data and error reports. No code, prompts, or personal
+						Help improve OneUnlimited by sending anonymous usage data and error reports. No code, prompts, or personal
 						information are ever sent. See our{" "}
-						<VSCodeLink href="https://docs.cline.bot/more-info/telemetry" style={{ fontSize: "inherit" }}>
+						<VSCodeLink href="https://docs.oneunlimited.bot/more-info/telemetry" style={{ fontSize: "inherit" }}>
 							telemetry overview
 						</VSCodeLink>{" "}
 						and{" "}
-						<VSCodeLink href="https://cline.bot/privacy" style={{ fontSize: "inherit" }}>
+						<VSCodeLink href="https://oneunlimited.bot/privacy" style={{ fontSize: "inherit" }}>
 							privacy policy
 						</VSCodeLink>{" "}
 						for more details.
@@ -327,8 +327,8 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 							padding: 0,
 						}}>
 						If you have any questions or feedback, feel free to open an issue at{" "}
-						<VSCodeLink href="https://github.com/cline/cline" style={{ display: "inline" }}>
-							https://github.com/cline/cline
+						<VSCodeLink href="https://github.com/oneunlimited/oneunlimited" style={{ display: "inline" }}>
+							https://github.com/oneunlimited/oneunlimited
 						</VSCodeLink>
 					</p>
 					<p

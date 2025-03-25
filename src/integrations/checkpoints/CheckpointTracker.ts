@@ -9,7 +9,7 @@ import { getShadowGitPath, getWorkingDirectory, hashWorkingDir } from "./Checkpo
 /**
  * CheckpointTracker Module
  *
- * Core implementation of Cline's Checkpoints system that provides version control
+ * Core implementation of OneUnlimited's Checkpoints system that provides version control
  * capabilities without interfering with the user's main Git repository. Key features:
  *
  * Shadow Git Repository:
@@ -80,7 +80,7 @@ class CheckpointTracker {
 	 * - Creates/initializes shadow git repository
 	 *
 	 * Configuration:
-	 * - Respects 'cline.enableCheckpoints' VS Code setting
+	 * - Respects 'oneunlimited.enableCheckpoints' VS Code setting
 	 */
 	public static async create(taskId: string, globalStoragePath: string | undefined): Promise<CheckpointTracker | undefined> {
 		if (!globalStoragePath) {
@@ -91,7 +91,7 @@ class CheckpointTracker {
 			const startTime = performance.now()
 
 			// Check if checkpoints are disabled in VS Code settings
-			const enableCheckpoints = vscode.workspace.getConfiguration("cline").get<boolean>("enableCheckpoints") ?? true
+			const enableCheckpoints = vscode.workspace.getConfiguration("oneunlimited").get<boolean>("enableCheckpoints") ?? true
 			if (!enableCheckpoints) {
 				return undefined // Don't create tracker when disabled
 			}

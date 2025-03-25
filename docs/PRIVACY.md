@@ -1,1 +1,1 @@
-See [https://cline.bot/privacy](https://cline.bot/privacy) for our privacy policy.
+See [https://oneunlimited.bot/privacy](https://oneunlimited.bot/privacy) for our privacy policy.

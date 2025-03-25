@@ -30,7 +30,7 @@ const CreditLimitError: React.FC<CreditLimitErrorProps> = ({ currentBalance, tot
 			</div>
 
 			<VSCodeButtonLink
-				href="https://app.cline.bot/credits"
+				href="https://app.oneunlimited.bot/credits"
 				style={{
 					width: "100%",
 					marginBottom: "8px",

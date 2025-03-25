@@ -1,8 +1,8 @@
 {
-	"name": "claude-dev",
-	"displayName": "Cline",
-	"description": "Autonomous coding agent right in your IDE, capable of creating/editing files, running commands, using the browser, and more with your permission every step of the way.",
-	"version": "3.7.1",
+	"name": "oneunlimited",
+	"displayName": "OneUnlimited",
+	"description": "Autonomous multi-agent system with unlimited capabilities seamlessly integrated in your IDE for full-stack development with secure permission controls",
+	"version": "1.0.0",
 	"icon": "assets/icons/icon.png",
 	"galleryBanner": {
 		"color": "#617A91",
@@ -12,15 +12,15 @@
 		"vscode": "^1.84.0"
 	},
 	"author": {
-		"name": "Cline Bot Inc."
+		"name": "One Unlimited Dev Team"
 	},
 	"license": "Apache-2.0",
-	"publisher": "saoudrizwan",
+	"publisher": "one-unlimited",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/cline/cline"
+		"url": "https://github.com/oneunlimited/oneunlimited"
 	},
-	"homepage": "https://cline.bot",
+	"homepage": "https://oneunlimited.dev",
 	"categories": [
 		"AI",
 		"Chat",
@@ -30,18 +30,13 @@
 		"Testing"
 	],
 	"keywords": [
-		"cline",
-		"claude",
-		"dev",
+		"oneunlimited",
 		"mcp",
 		"openrouter",
 		"coding",
 		"agent",
 		"autonomous",
-		"chatgpt",
-		"sonnet",
-		"ai",
-		"llama"
+		"ai"
 	],
 	"activationEvents": [],
 	"main": "./dist/extension.js",
@@ -49,86 +44,86 @@
 		"viewsContainers": {
 			"activitybar": [
 				{
-					"id": "claude-dev-ActivityBar",
-					"title": "Cline",
+					"id": "oneunlimited-ActivityBar",
+					"title": "OneUnlimited",
 					"icon": "assets/icons/icon.svg"
 				}
 			]
 		},
 		"views": {
-			"claude-dev-ActivityBar": [
+			"oneunlimited-ActivityBar": [
 				{
 					"type": "webview",
-					"id": "claude-dev.SidebarProvider",
+					"id": "oneunlimited.SidebarProvider",
 					"name": ""
 				}
 			]
 		},
 		"commands": [
 			{
-				"command": "cline.plusButtonClicked",
+				"command": "oneunlimited.plusButtonClicked",
 				"title": "New Task",
 				"icon": "$(add)"
 			},
 			{
-				"command": "cline.mcpButtonClicked",
+				"command": "oneunlimited.mcpButtonClicked",
 				"title": "MCP Servers",
 				"icon": "$(extensions)"
 			},
 			{
-				"command": "cline.historyButtonClicked",
+				"command": "oneunlimited.historyButtonClicked",
 				"title": "History",
 				"icon": "$(history)"
 			},
 			{
-				"command": "cline.popoutButtonClicked",
+				"command": "oneunlimited.popoutButtonClicked",
 				"title": "Open in Editor",
 				"icon": "$(link-external)"
 			},
 			{
-				"command": "cline.settingsButtonClicked",
+				"command": "oneunlimited.settingsButtonClicked",
 				"title": "Settings",
 				"icon": "$(settings-gear)"
 			},
 			{
-				"command": "cline.openInNewTab",
+				"command": "oneunlimited.openInNewTab",
 				"title": "Open In New Tab",
-				"category": "Cline"
+				"category": "OneUnlimited"
 			}
 		],
 		"menus": {
 			"view/title": [
 				{
-					"command": "cline.plusButtonClicked",
+					"command": "oneunlimited.plusButtonClicked",
 					"group": "navigation@1",
-					"when": "view == claude-dev.SidebarProvider"
+					"when": "view == oneunlimited.SidebarProvider"
 				},
 				{
-					"command": "cline.mcpButtonClicked",
+					"command": "oneunlimited.mcpButtonClicked",
 					"group": "navigation@2",
-					"when": "view == claude-dev.SidebarProvider"
+					"when": "view == oneunlimited.SidebarProvider"
 				},
 				{
-					"command": "cline.historyButtonClicked",
+					"command": "oneunlimited.historyButtonClicked",
 					"group": "navigation@3",
-					"when": "view == claude-dev.SidebarProvider"
+					"when": "view == oneunlimited.SidebarProvider"
 				},
 				{
-					"command": "cline.popoutButtonClicked",
+					"command": "oneunlimited.popoutButtonClicked",
 					"group": "navigation@4",
-					"when": "view == claude-dev.SidebarProvider"
+					"when": "view == oneunlimited.SidebarProvider"
 				},
 				{
-					"command": "cline.settingsButtonClicked",
+					"command": "oneunlimited.settingsButtonClicked",
 					"group": "navigation@5",
-					"when": "view == claude-dev.SidebarProvider"
+					"when": "view == oneunlimited.SidebarProvider"
 				}
 			]
 		},
 		"configuration": {
-			"title": "Cline",
+			"title": "OneUnlimited",
 			"properties": {
-				"cline.vsCodeLmModelSelector": {
+				"oneunlimited.vsCodeLmModelSelector": {
 					"type": "object",
 					"properties": {
 						"vendor": {
@@ -142,7 +137,7 @@
 					},
 					"description": "Settings for VSCode Language Model API"
 				},
-				"cline.mcp.mode": {
+				"oneunlimited.mcp.mode": {
 					"type": "string",
 					"enum": [
 						"full",
@@ -155,19 +150,19 @@
 						"Disable all MCP functionality"
 					],
 					"default": "full",
-					"description": "Controls MCP inclusion in prompts, reduces token usage if you only need access to certain functionality."
+					"description": "Controls MCP inclusion in prompts reduces token usage if you only need access to certain functionality."
 				},
-				"cline.enableCheckpoints": {
+				"oneunlimited.enableCheckpoints": {
 					"type": "boolean",
 					"default": true,
 					"description": "Enables extension to save checkpoints of workspace throughout the task. Uses git under the hood which may not work well with large workspaces."
 				},
-				"cline.disableBrowserTool": {
+				"oneunlimited.disableBrowserTool": {
 					"type": "boolean",
 					"default": false,
 					"description": "Disables extension from spawning browser session."
 				},
-				"cline.modelSettings.o3Mini.reasoningEffort": {
+				"oneunlimited.modelSettings.o3Mini.reasoningEffort": {
 					"type": "string",
 					"enum": [
 						"low",
@@ -177,12 +172,12 @@
 					"default": "medium",
 					"description": "Controls the reasoning effort when using the o3-mini model. Higher values may result in more thorough but slower responses."
 				},
-				"cline.chromeExecutablePath": {
+				"oneunlimited.chromeExecutablePath": {
 					"type": "string",
 					"default": null,
-					"description": "Path to Chrome executable for browser use functionality. If not set, the extension will attempt to find or download it automatically."
+					"description": "Path to Chrome executable for browser use functionality. If not set the extension will attempt to find or download it automatically."
 				},
-				"cline.preferredLanguage": {
+				"oneunlimited.preferredLanguage": {
 					"type": "string",
 					"enum": [
 						"English",
@@ -205,17 +200,17 @@
 						"Turkish - Türkçe"
 					],
 					"default": "English",
-					"description": "The language that Cline should use for communication."
+					"description": "The language that One Unlimited should use for communication."
 				},
-				"cline.mcpMarketplace.enabled": {
+				"oneunlimited.mcpMarketplace.enabled": {
 					"type": "boolean",
 					"default": true,
 					"description": "Controls whether the MCP Marketplace is enabled."
 				},
-				"cline.conversationTelemetry": {
+				"oneunlimited.conversationTelemetry": {
 					"type": "boolean",
 					"default": false,
-					"description": "Share message data,  code, and more extensive telemetry. This data may be used to improve prompts used in Cline, train models, and understand failure states more accurately."
+					"description": "Share message data code and more extensive telemetry. This data may be used to improve prompts used in One Unlimited train models and understand failure states more accurately."
 				}
 			}
 		}
@@ -227,6 +222,13 @@
 		"watch:esbuild": "node esbuild.js --watch",
 		"watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
 		"package": "npm run build:webview && npm run check-types && npm run lint && node esbuild.js --production",
+		"compile:agents": "node esbuild.js --production",
+		"test:agents": "npm run compile:agents && node dist/agents/test-agents.js",
+		"test:demo-agents": "node src/core/agents/demo-agents.js",
+		"test:interactive-agents": "node src/core/agents/interactive-agents.js",
+		"test:agent-system": "node scripts/test-agent-system.js",
+		"test:llm-agents": "node scripts/run-llm-agents.js",
+		"update:api-keys": "node scripts/update-api-keys.js",
 		"compile-tests": "tsc -p ./tsconfig.test.json --outDir out",
 		"watch-tests": "tsc -p . -w --outDir out",
 		"pretest": "npm run compile-tests && npm run compile && npm run lint",
@@ -243,21 +245,23 @@
 		"publish:marketplace:prerelease": "vsce publish --pre-release && ovsx publish --pre-release",
 		"prepare": "husky",
 		"changeset": "changeset",
-		"version-packages": "changeset version"
+		"version-packages": "changeset version",
+		"build:runtime": "docker build -f docker/runtime.Dockerfile -t oneunlimited-runtime ."
 	},
 	"devDependencies": {
 		"@changesets/cli": "^2.27.12",
 		"@types/chai": "^5.0.1",
 		"@types/diff": "^5.2.1",
+		"@types/json-schema": "^7.0.15",
 		"@types/mocha": "^10.0.7",
 		"@types/node": "20.x",
 		"@types/should": "^11.2.0",
 		"@types/sinon": "^17.0.4",
-		"@types/vscode": "^1.84.0",
-		"@typescript-eslint/eslint-plugin": "^7.14.1",
-		"@typescript-eslint/parser": "^7.11.0",
+		"@types/vscode": "^1.98.0",
+		"@typescript-eslint/eslint-plugin": "^8.27.0",
+		"@typescript-eslint/parser": "^8.27.0",
 		"@vscode/test-cli": "^0.0.9",
-		"@vscode/test-electron": "^2.4.0",
+		"@vscode/test-electron": "^2.4.1",
 		"chai": "^4.3.10",
 		"esbuild": "^0.25.0",
 		"eslint": "^8.57.0",
@@ -266,7 +270,9 @@
 		"prettier": "^3.3.3",
 		"should": "^13.2.3",
 		"sinon": "^19.0.2",
-		"typescript": "^5.4.5"
+		"typescript": "^5.8.2",
+		"vscode": "^1.1.37",
+		"vscode-test": "^1.6.1"
 	},
 	"dependencies": {
 		"@anthropic-ai/bedrock-sdk": "^0.12.4",
@@ -285,6 +291,7 @@
 		"@opentelemetry/semantic-conventions": "^1.30.0",
 		"@types/clone-deep": "^4.0.4",
 		"@types/get-folder-size": "^3.0.4",
+		"@types/jsonwebtoken": "^9.0.9",
 		"@types/pdf-parse": "^1.1.4",
 		"@types/turndown": "^5.0.5",
 		"@vscode/codicons": "^0.0.36",
@@ -302,8 +309,10 @@
 		"globby": "^14.0.2",
 		"ignore": "^7.0.3",
 		"isbinaryfile": "^5.0.2",
+		"jsonwebtoken": "^9.0.2",
 		"mammoth": "^1.8.0",
 		"monaco-vscode-textmate-theme-converter": "^0.1.7",
+		"node-fetch": "^2.7.0",
 		"ollama": "^0.5.13",
 		"open-graph-scraper": "^6.9.0",
 		"openai": "^4.83.0",

@@ -102,12 +102,12 @@ const McpView = ({ onDone }: McpViewProps) => {
 									Model Context Protocol
 								</VSCodeLink>{" "}
 								enables communication with locally running MCP servers that provide additional tools and resources
-								to extend Cline's capabilities. You can use{" "}
+								to extend OneUnlimited's capabilities. You can use{" "}
 								<VSCodeLink href="https://github.com/modelcontextprotocol/servers" style={{ display: "inline" }}>
 									community-made servers
 								</VSCodeLink>{" "}
-								or ask Cline to create new tools specific to your workflow (e.g., "add a tool that gets the latest
-								npm docs").{" "}
+								or ask OneUnlimited to create new tools specific to your workflow (e.g., "add a tool that gets the
+								latest npm docs").{" "}
 								<VSCodeLink href="https://x.com/sdrzn/status/1867271665086074969" style={{ display: "inline" }}>
 									See a demo here.
 								</VSCodeLink>
@@ -156,7 +156,7 @@ const McpView = ({ onDone }: McpViewProps) => {
 										onClick={() => {
 											vscode.postMessage({
 												type: "openExtensionSettings",
-												text: "cline.mcp",
+												text: "oneunlimited.mcp",
 											})
 										}}
 										style={{ fontSize: "12px" }}>

@@ -14,7 +14,7 @@ export type ApiProvider =
 	| "qwen"
 	| "mistral"
 	| "vscode-lm"
-	| "cline"
+	| "oneunlimited"
 	| "litellm"
 	| "asksage"
 	| "xai"
@@ -23,7 +23,7 @@ export type ApiProvider =
 export interface ApiHandlerOptions {
 	apiModelId?: string
 	apiKey?: string // anthropic
-	clineApiKey?: string
+	oneunlimitedApiKey?: string
 	liteLlmBaseUrl?: string
 	liteLlmModelId?: string
 	liteLlmApiKey?: string

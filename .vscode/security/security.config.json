@@ -1,0 +1,16 @@
+{
+	"jwt": {
+		"expiration": "15m",
+		"refreshInterval": "5m",
+		"issuer": "oneunlimited-auth",
+		"audience": "multi-agent-system"
+	},
+	"autoApprove": {
+		"exclusions": ["filesystem/*.env", "command/rm *", "mcp/*-admin"]
+	},
+	"audit": {
+		"sensitiveOperations": ["filesystem/write", "command/execute", "mcp/tool-invoke"],
+		"logFormats": ["encrypted", "plaintext"],
+		"retentionDays": 30
+	}
+}

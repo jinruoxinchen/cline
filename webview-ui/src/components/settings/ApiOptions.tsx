@@ -52,7 +52,7 @@ import { vscode } from "../../utils/vscode"
 import { getAsVar, VSC_DESCRIPTION_FOREGROUND } from "../../utils/vscStyles"
 import VSCodeButtonLink from "../common/VSCodeButtonLink"
 import OpenRouterModelPicker, { ModelDescriptionMarkdown } from "./OpenRouterModelPicker"
-import AccountView, { ClineAccountView } from "../account/AccountView"
+import AccountView, { OneUnlimitedAccountView } from "../account/AccountView"
 
 interface ApiOptionsProps {
 	showModelOptions: boolean
@@ -191,7 +191,7 @@ const ApiOptions = ({ showModelOptions, apiErrorMessage, modelIdErrorMessage, is
 						minWidth: 130,
 						position: "relative",
 					}}>
-					<VSCodeOption value="cline">Cline</VSCodeOption>
+					<VSCodeOption value="oneunlimited">OneUnlimited</VSCodeOption>
 					<VSCodeOption value="openrouter">OpenRouter</VSCodeOption>
 					<VSCodeOption value="anthropic">Anthropic</VSCodeOption>
 					<VSCodeOption value="bedrock">AWS Bedrock</VSCodeOption>
@@ -214,9 +214,9 @@ const ApiOptions = ({ showModelOptions, apiErrorMessage, modelIdErrorMessage, is
 				</VSCodeDropdown>
 			</DropdownContainer>
 
-			{selectedProvider === "cline" && (
+			{selectedProvider === "oneunlimited" && (
 				<div style={{ marginBottom: 8, marginTop: 4 }}>
-					<ClineAccountView />
+					<OneUnlimitedAccountView />
 				</div>
 			)}
 
@@ -966,8 +966,8 @@ const ApiOptions = ({ showModelOptions, apiErrorMessage, modelIdErrorMessage, is
 							color: "var(--vscode-descriptionForeground)",
 						}}>
 						<span style={{ color: "var(--vscode-errorForeground)" }}>
-							(<span style={{ fontWeight: 500 }}>Note:</span> Cline uses complex prompts and works best with Claude
-							models. Less capable models may not work as expected.)
+							(<span style={{ fontWeight: 500 }}>Note:</span> OneUnlimited uses complex prompts and works best with
+							Claude models. Less capable models may not work as expected.)
 						</span>
 					</p>
 				</div>
@@ -997,8 +997,8 @@ const ApiOptions = ({ showModelOptions, apiErrorMessage, modelIdErrorMessage, is
 							color: "var(--vscode-descriptionForeground)",
 						}}>
 						<span style={{ color: "var(--vscode-errorForeground)" }}>
-							(<span style={{ fontWeight: 500 }}>Note:</span> Cline uses complex prompts and works best with Claude
-							models. Less capable models may not work as expected.)
+							(<span style={{ fontWeight: 500 }}>Note:</span> OneUnlimited uses complex prompts and works best with
+							Claude models. Less capable models may not work as expected.)
 						</span>
 					</p>
 				</div>
@@ -1028,8 +1028,8 @@ const ApiOptions = ({ showModelOptions, apiErrorMessage, modelIdErrorMessage, is
 							color: "var(--vscode-descriptionForeground)",
 						}}>
 						<span style={{ color: "var(--vscode-errorForeground)" }}>
-							(<span style={{ fontWeight: 500 }}>Note:</span> Cline uses complex prompts and works best with Claude
-							models. Less capable models may not work as expected.)
+							(<span style={{ fontWeight: 500 }}>Note:</span> OneUnlimited uses complex prompts and works best with
+							Claude models. Less capable models may not work as expected.)
 						</span>
 					</p>
 				</div>
@@ -1156,8 +1156,8 @@ const ApiOptions = ({ showModelOptions, apiErrorMessage, modelIdErrorMessage, is
 						</VSCodeLink>{" "}
 						feature to use it with this extension.{" "}
 						<span style={{ color: "var(--vscode-errorForeground)" }}>
-							(<span style={{ fontWeight: 500 }}>Note:</span> Cline uses complex prompts and works best with Claude
-							models. Less capable models may not work as expected.)
+							(<span style={{ fontWeight: 500 }}>Note:</span> OneUnlimited uses complex prompts and works best with
+							Claude models. Less capable models may not work as expected.)
 						</span>
 					</p>
 				</div>
@@ -1264,8 +1264,8 @@ const ApiOptions = ({ showModelOptions, apiErrorMessage, modelIdErrorMessage, is
 							quickstart guide.
 						</VSCodeLink>
 						<span style={{ color: "var(--vscode-errorForeground)" }}>
-							(<span style={{ fontWeight: 500 }}>Note:</span> Cline uses complex prompts and works best with Claude
-							models. Less capable models may not work as expected.)
+							(<span style={{ fontWeight: 500 }}>Note:</span> OneUnlimited uses complex prompts and works best with
+							Claude models. Less capable models may not work as expected.)
 						</span>
 					</p>
 				</div>
@@ -1294,7 +1294,7 @@ const ApiOptions = ({ showModelOptions, apiErrorMessage, modelIdErrorMessage, is
 							</VSCodeLink>
 						)}
 					</p>
-					{/* Note: To fully implement this, you would need to add a handler in ClineProvider.ts */}
+					{/* Note: To fully implement this, you would need to add a handler in OneUnlimitedProvider.ts */}
 					{/* {apiConfiguration?.xaiApiKey && (
 						<button
 							onClick={() => {
@@ -1354,7 +1354,7 @@ const ApiOptions = ({ showModelOptions, apiErrorMessage, modelIdErrorMessage, is
 			)}
 
 			{selectedProvider !== "openrouter" &&
-				selectedProvider !== "cline" &&
+				selectedProvider !== "oneunlimited" &&
 				selectedProvider !== "openai" &&
 				selectedProvider !== "ollama" &&
 				selectedProvider !== "lmstudio" &&
@@ -1399,7 +1399,7 @@ const ApiOptions = ({ showModelOptions, apiErrorMessage, modelIdErrorMessage, is
 					</>
 				)}
 
-			{(selectedProvider === "openrouter" || selectedProvider === "cline") && showModelOptions && (
+			{(selectedProvider === "openrouter" || selectedProvider === "oneunlimited") && showModelOptions && (
 				<OpenRouterModelPicker isPopup={isPopup} />
 			)}
 
@@ -1610,7 +1610,7 @@ export function normalizeApiConfiguration(apiConfiguration?: ApiConfiguration): 
 				selectedModelId: apiConfiguration?.openRouterModelId || openRouterDefaultModelId,
 				selectedModelInfo: apiConfiguration?.openRouterModelInfo || openRouterDefaultModelInfo,
 			}
-		case "cline":
+		case "oneunlimited":
 			return {
 				selectedProvider: provider,
 				selectedModelId: apiConfiguration?.openRouterModelId || openRouterDefaultModelId,

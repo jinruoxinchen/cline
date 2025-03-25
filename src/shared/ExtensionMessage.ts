@@ -51,7 +51,7 @@ export interface ExtensionMessage {
 	lmStudioModels?: string[]
 	vsCodeLmModels?: { vendor?: string; family?: string; version?: string; id?: string }[]
 	filePaths?: string[]
-	partialMessage?: ClineMessage
+	partialMessage?: OneUnlimitedMessage
 	openRouterModels?: Record<string, ModelInfo>
 	openAiModels?: string[]
 	mcpServers?: McpServer[]
@@ -85,7 +85,7 @@ export interface ExtensionState {
 	browserSettings: BrowserSettings
 	chatSettings: ChatSettings
 	checkpointTrackerErrorMessage?: string
-	clineMessages: ClineMessage[]
+	oneunlimitedMessages: OneUnlimitedMessage[]
 	currentTaskItem?: HistoryItem
 	customInstructions?: string
 	mcpMarketplaceEnabled?: boolean
@@ -104,11 +104,11 @@ export interface ExtensionState {
 	vscMachineId: string
 }
 
-export interface ClineMessage {
+export interface OneUnlimitedMessage {
 	ts: number
 	type: "ask" | "say"
-	ask?: ClineAsk
-	say?: ClineSay
+	ask?: OneUnlimitedAsk
+	say?: OneUnlimitedSay
 	text?: string
 	reasoning?: string
 	images?: string[]
@@ -119,7 +119,7 @@ export interface ClineMessage {
 	conversationHistoryDeletedRange?: [number, number] // for when conversation history is truncated for API requests
 }
 
-export type ClineAsk =
+export type OneUnlimitedAsk =
 	| "followup"
 	| "plan_mode_response"
 	| "command"
@@ -134,7 +134,7 @@ export type ClineAsk =
 	| "browser_action_launch"
 	| "use_mcp_server"
 
-export type ClineSay =
+export type OneUnlimitedSay =
 	| "task"
 	| "error"
 	| "api_req_started"
@@ -157,10 +157,10 @@ export type ClineSay =
 	| "use_mcp_server"
 	| "diff_error"
 	| "deleted_api_reqs"
-	| "clineignore_error"
+	| "oneunlimitedignore_error"
 	| "checkpoint_created"
 
-export interface ClineSayTool {
+export interface OneUnlimitedSayTool {
 	tool:
 		| "editedExistingFile"
 		| "newFileCreated"
@@ -180,7 +180,7 @@ export interface ClineSayTool {
 export const browserActions = ["launch", "click", "type", "scroll_down", "scroll_up", "close"] as const
 export type BrowserAction = (typeof browserActions)[number]
 
-export interface ClineSayBrowserAction {
+export interface OneUnlimitedSayBrowserAction {
 	action: BrowserAction
 	coordinate?: string
 	text?: string
@@ -193,7 +193,7 @@ export type BrowserActionResult = {
 	currentMousePosition?: string
 }
 
-export interface ClineAskUseMcpServer {
+export interface OneUnlimitedAskUseMcpServer {
 	serverName: string
 	type: "use_mcp_tool" | "access_mcp_resource"
 	toolName?: string
@@ -201,29 +201,29 @@ export interface ClineAskUseMcpServer {
 	uri?: string
 }
 
-export interface ClinePlanModeResponse {
+export interface OneUnlimitedPlanModeResponse {
 	response: string
 	options?: string[]
 	selected?: string
 }
 
-export interface ClineAskQuestion {
+export interface OneUnlimitedAskQuestion {
 	question: string
 	options?: string[]
 	selected?: string
 }
 
-export interface ClineApiReqInfo {
+export interface OneUnlimitedApiReqInfo {
 	request?: string
 	tokensIn?: number
 	tokensOut?: number
 	cacheWrites?: number
 	cacheReads?: number
 	cost?: number
-	cancelReason?: ClineApiReqCancelReason
+	cancelReason?: OneUnlimitedApiReqCancelReason
 	streamingFailedMessage?: string
 }
 
-export type ClineApiReqCancelReason = "streaming_failed" | "user_cancelled"
+export type OneUnlimitedApiReqCancelReason = "streaming_failed" | "user_cancelled"
 
 export const COMPLETION_RESULT_CHANGES_FLAG = "HAS_CHANGES"

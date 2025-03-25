@@ -30,7 +30,7 @@ const AccountView = ({ onDone }: AccountViewProps) => {
 					marginBottom: "17px",
 					paddingRight: 17,
 				}}>
-				<h3 style={{ color: "var(--vscode-foreground)", margin: 0 }}>Cline Account</h3>
+				<h3 style={{ color: "var(--vscode-foreground)", margin: 0 }}>OneUnlimited Account</h3>
 				<VSCodeButton onClick={onDone}>Done</VSCodeButton>
 			</div>
 			<div
@@ -42,14 +42,14 @@ const AccountView = ({ onDone }: AccountViewProps) => {
 					flexDirection: "column",
 				}}>
 				<div style={{ marginBottom: 5 }}>
-					<ClineAccountView />
+					<OneUnlimitedAccountView />
 				</div>
 			</div>
 		</div>
 	)
 }
 
-export const ClineAccountView = () => {
+export const OneUnlimitedAccountView = () => {
 	const { user, handleSignOut } = useFirebaseAuth()
 
 	const handleLogin = () => {
@@ -131,7 +131,7 @@ export const ClineAccountView = () => {
 							)}
 							<div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
 								<VSCodeButtonLink
-									href="https://app.cline.bot/credits"
+									href="https://app.oneunlimited.bot/credits"
 									appearance="primary"
 									style={{
 										transform: "scale(0.85)",
@@ -163,7 +163,7 @@ export const ClineAccountView = () => {
 			) : (
 				<div style={{}}>
 					<VSCodeButton onClick={handleLogin} style={{ marginTop: 0 }}>
-						Sign Up with Cline
+						Sign Up with OneUnlimited
 					</VSCodeButton>
 				</div>
 			)}

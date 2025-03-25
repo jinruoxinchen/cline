@@ -2,7 +2,7 @@ import { VSCodeButton } from "@vscode/webview-ui-toolkit/react"
 import React, { memo, useEffect, useMemo, useRef, useState } from "react"
 import { useWindowSize } from "react-use"
 import { mentionRegexGlobal } from "../../../../src/shared/context-mentions"
-import { ClineMessage } from "../../../../src/shared/ExtensionMessage"
+import { OneUnlimitedMessage } from "../../../../src/shared/ExtensionMessage"
 import { useExtensionState } from "../../context/ExtensionStateContext"
 import { formatLargeNumber } from "../../utils/format"
 import { formatSize } from "../../utils/size"
@@ -11,7 +11,7 @@ import Thumbnails from "../common/Thumbnails"
 import { normalizeApiConfiguration } from "../settings/ApiOptions"
 
 interface TaskHeaderProps {
-	task: ClineMessage
+	task: OneUnlimitedMessage
 	tokensIn: number
 	tokensOut: number
 	doesModelSupportPromptCache: boolean
@@ -126,7 +126,9 @@ const TaskHeader: React.FC<TaskHeaderProps> = ({
 	}, [apiConfiguration?.apiProvider, apiConfiguration?.openAiModelInfo])
 
 	const shouldShowPromptCacheInfo =
-		doesModelSupportPromptCache && apiConfiguration?.apiProvider !== "openrouter" && apiConfiguration?.apiProvider !== "cline"
+		doesModelSupportPromptCache &&
+		apiConfiguration?.apiProvider !== "openrouter" &&
+		apiConfiguration?.apiProvider !== "oneunlimited"
 
 	const ContextWindowComponent = (
 		<>
@@ -497,7 +499,7 @@ const TaskHeader: React.FC<TaskHeaderProps> = ({
 											<>
 												{" "}
 												<a
-													href="https://github.com/cline/cline/wiki/Installing-Git-for-Checkpoints"
+													href="https://github.com/oneunlimited/oneunlimited/wiki/Installing-Git-for-Checkpoints"
 													style={{
 														color: "inherit",
 														textDecoration: "underline",

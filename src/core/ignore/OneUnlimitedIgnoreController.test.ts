@@ -1,28 +1,28 @@
-import { ClineIgnoreController } from "./ClineIgnoreController"
+import { OneUnlimitedIgnoreController } from "./OneUnlimitedIgnoreController"
 import fs from "fs/promises"
 import path from "path"
 import os from "os"
 import { after, beforeEach, describe, it } from "mocha"
 import "should"
 
-describe("ClineIgnoreController", () => {
+describe("OneUnlimitedIgnoreController", () => {
 	let tempDir: string
-	let controller: ClineIgnoreController
+	let controller: OneUnlimitedIgnoreController
 
 	beforeEach(async () => {
 		// Create a temp directory for testing
 		tempDir = path.join(os.tmpdir(), `llm-test-${Date.now()}-${Math.random().toString(36).slice(2)}`)
 		await fs.mkdir(tempDir)
 
-		// Create default .clineignore file
+		// Create default .oneunlimitedignore file
 		await fs.writeFile(
-			path.join(tempDir, ".clineignore"),
+			path.join(tempDir, ".oneunlimitedignore"),
 			[".env", "*.secret", "private/", "# This is a comment", "", "temp.*", "file-with-space-at-end.* ", "**/.git/**"].join(
 				"\n",
 			),
 		)
 
-		controller = new ClineIgnoreController(tempDir)
+		controller = new OneUnlimitedIgnoreController(tempDir)
 		await controller.initialize()
 	})
 
@@ -50,8 +50,8 @@ describe("ClineIgnoreController", () => {
 			results.forEach((result) => result.should.be.true())
 		})
 
-		it("should block access to .clineignore file", async () => {
-			const result = controller.validateAccess(".clineignore")
+		it("should block access to .oneunlimitedignore file", async () => {
+			const result = controller.validateAccess(".oneunlimitedignore")
 			result.should.be.false()
 		})
 	})
@@ -81,11 +81,11 @@ describe("ClineIgnoreController", () => {
 
 		it("should handle pattern edge cases", async () => {
 			await fs.writeFile(
-				path.join(tempDir, ".clineignore"),
+				path.join(tempDir, ".oneunlimitedignore"),
 				["*.secret", "private/", "*.tmp", "data-*.json", "temp/*"].join("\n"),
 			)
 
-			controller = new ClineIgnoreController(tempDir)
+			controller = new OneUnlimitedIgnoreController(tempDir)
 			await controller.initialize()
 
 			const results = [
@@ -103,7 +103,7 @@ describe("ClineIgnoreController", () => {
 
 		// it("should handle negation patterns", async () => {
 		// 	await fs.writeFile(
-		// 		path.join(tempDir, ".clineignore"),
+		// 		path.join(tempDir, ".oneunlimitedignore"),
 		// 		[
 		// 			"temp/*", // Ignore everything in temp
 		// 			"!temp/allowed/*", // But allow files in temp/allowed
@@ -116,7 +116,7 @@ describe("ClineIgnoreController", () => {
 		// 		].join("\n"),
 		// 	)
 
-		// 	controller = new ClineIgnoreController(tempDir)
+		// 	controller = new OneUnlimitedIgnoreController(tempDir)
 
 		// 	const results = [
 		// 		// Basic negation
@@ -148,14 +148,14 @@ describe("ClineIgnoreController", () => {
 		// 	results[9].should.be.true() // assets/public/data.json
 		// })
 
-		it("should handle comments in .clineignore", async () => {
-			// Create a new .clineignore with comments
+		it("should handle comments in .oneunlimitedignore", async () => {
+			// Create a new .oneunlimitedignore with comments
 			await fs.writeFile(
-				path.join(tempDir, ".clineignore"),
+				path.join(tempDir, ".oneunlimitedignore"),
 				["# Comment line", "*.secret", "private/", "temp.*"].join("\n"),
 			)
 
-			controller = new ClineIgnoreController(tempDir)
+			controller = new OneUnlimitedIgnoreController(tempDir)
 			await controller.initialize()
 
 			const result = controller.validateAccess("test.secret")
@@ -217,13 +217,13 @@ describe("ClineIgnoreController", () => {
 			result.should.be.true()
 		})
 
-		it("should handle missing .clineignore gracefully", async () => {
-			// Create a new controller in a directory without .clineignore
+		it("should handle missing .oneunlimitedignore gracefully", async () => {
+			// Create a new controller in a directory without .oneunlimitedignore
 			const emptyDir = path.join(os.tmpdir(), `llm-test-empty-${Date.now()}`)
 			await fs.mkdir(emptyDir)
 
 			try {
-				const controller = new ClineIgnoreController(emptyDir)
+				const controller = new OneUnlimitedIgnoreController(emptyDir)
 				await controller.initialize()
 				const result = controller.validateAccess("file.txt")
 				result.should.be.true()
@@ -232,10 +232,10 @@ describe("ClineIgnoreController", () => {
 			}
 		})
 
-		it("should handle empty .clineignore", async () => {
-			await fs.writeFile(path.join(tempDir, ".clineignore"), "")
+		it("should handle empty .oneunlimitedignore", async () => {
+			await fs.writeFile(path.join(tempDir, ".oneunlimitedignore"), "")
 
-			controller = new ClineIgnoreController(tempDir)
+			controller = new OneUnlimitedIgnoreController(tempDir)
 			await controller.initialize()
 
 			const result = controller.validateAccess("regular-file.txt")

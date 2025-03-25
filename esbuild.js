@@ -68,11 +68,7 @@ const extensionConfig = {
 	minify: production,
 	sourcemap: !production,
 	logLevel: "silent",
-	plugins: [
-		copyWasmFiles,
-		/* add to the end of plugins array */
-		esbuildProblemMatcherPlugin,
-	],
+	plugins: [copyWasmFiles, esbuildProblemMatcherPlugin],
 	entryPoints: ["src/extension.ts"],
 	format: "cjs",
 	sourcesContent: false,
@@ -81,13 +77,31 @@ const extensionConfig = {
 	external: ["vscode"],
 }
 
+const agentSystemConfig = {
+	bundle: true,
+	minify: production,
+	sourcemap: !production,
+	logLevel: "silent",
+	entryPoints: ["src/core/agents/test-agents.mjs", "src/core/agents/AgentSystem.ts", "src/core/agents/TeamLeaderAgent.ts"],
+	format: "esm",
+	sourcesContent: false,
+	platform: "node",
+	outdir: "dist/agents",
+	external: ["vscode", "@anthropic-ai/sdk", "openai"],
+}
+
 async function main() {
 	const extensionCtx = await esbuild.context(extensionConfig)
+	const agentCtx = await esbuild.context(agentSystemConfig)
+
 	if (watch) {
 		await extensionCtx.watch()
+		await agentCtx.watch()
 	} else {
 		await extensionCtx.rebuild()
+		await agentCtx.rebuild()
 		await extensionCtx.dispose()
+		await agentCtx.dispose()
 	}
 }
 

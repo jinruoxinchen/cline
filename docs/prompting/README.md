@@ -1,15 +1,15 @@
-# Cline Prompting Guide 🚀
+# OneUnlimited Prompting Guide 🚀
 
-Welcome to the Cline Prompting Guide! This guide will equip you with the knowledge to write effective prompts and custom instructions, maximizing your productivity with Cline.
+Welcome to the OneUnlimited Prompting Guide! This guide will equip you with the knowledge to write effective prompts and custom instructions, maximizing your productivity with OneUnlimited.
 
 ## Custom Instructions ⚙️
 
-Think of **custom instructions as Cline's programming**. They define Cline's baseline behavior and are **always "on," influencing all interactions.**
+Think of **custom instructions as OneUnlimited's programming**. They define OneUnlimited's baseline behavior and are **always "on," influencing all interactions.**
 
 To add custom instructions:
 
 1. Open VSCode
-2. Click the Cline extension settings dial ⚙️
+2. Click the OneUnlimited extension settings dial ⚙️
 3. Find the "Custom Instructions" field
 4. Paste your instructions
 
@@ -17,25 +17,25 @@ To add custom instructions:
 
 Custom instructions are powerful for:
 
--   Enforcing Coding Style and Best Practices: Ensure Cline always adheres to your team's coding conventions, naming conventions, and best practices.
--   Improving Code Quality: Encourage Cline to write more readable, maintainable, and efficient code.
--   Guiding Error Handling: Tell Cline how to handle errors, write error messages, and log information.
+-   Enforcing Coding Style and Best Practices: Ensure OneUnlimited always adheres to your team's coding conventions, naming conventions, and best practices.
+-   Improving Code Quality: Encourage OneUnlimited to write more readable, maintainable, and efficient code.
+-   Guiding Error Handling: Tell OneUnlimited how to handle errors, write error messages, and log information.
 
 **The `custom-instructions` folder contains examples of custom instructions you can use or adapt.**
 
-## .clinerules File 📋
+## .oneunlimitedrules File 📋
 
-While custom instructions are user-specific and global (applying across all projects), the `.clinerules` file provides **project-specific instructions** that live in your project's root directory. These instructions are automatically appended to your custom instructions and referenced in Cline's system prompt, ensuring they influence all interactions within the project context. This makes it an excellent tool for:
+While custom instructions are user-specific and global (applying across all projects), the `.oneunlimitedrules` file provides **project-specific instructions** that live in your project's root directory. These instructions are automatically appended to your custom instructions and referenced in OneUnlimited's system prompt, ensuring they influence all interactions within the project context. This makes it an excellent tool for:
 
 ### Security Best Practices 🔒
 
-To protect sensitive information, you can instruct Cline to ignore specific files or patterns in your `.clinerules`. This is particularly important for:
+To protect sensitive information, you can instruct OneUnlimited to ignore specific files or patterns in your `.oneunlimitedrules`. This is particularly important for:
 
 -   `.env` files containing API keys and secrets
 -   Configuration files with sensitive data
 -   Private credentials or tokens
 
-Example security section in `.clinerules`:
+Example security section in `.oneunlimitedrules`:
 
 ```markdown
 # Security
@@ -58,7 +58,7 @@ DO NOT read or modify:
 
 ### General Use Cases
 
-The `.clinerules` file is excellent for:
+The `.oneunlimitedrules` file is excellent for:
 
 -   Maintaining project standards across team members
 -   Enforcing development practices
@@ -66,7 +66,7 @@ The `.clinerules` file is excellent for:
 -   Setting up analysis frameworks
 -   Defining project-specific behaviors
 
-### Example .clinerules Structure
+### Example .oneunlimitedrules Structure
 
 ```markdown
 # Project Guidelines
@@ -105,22 +105,22 @@ Create ADRs in /docs/adr for:
 
 ### Key Benefits
 
-1. **Version Controlled**: The `.clinerules` file becomes part of your project's source code
+1. **Version Controlled**: The `.oneunlimitedrules` file becomes part of your project's source code
 2. **Team Consistency**: Ensures consistent behavior across all team members
 3. **Project-Specific**: Rules and standards tailored to each project's needs
 4. **Institutional Knowledge**: Maintains project standards and practices in code
 
-Place the `.clinerules` file in your project's root directory:
+Place the `.oneunlimitedrules` file in your project's root directory:
 
 ```
 your-project/
-├── .clinerules
+├── .oneunlimitedrules
 ├── src/
 ├── docs/
 └── ...
 ```
 
-Cline's system prompt, on the other hand, is not user-editable ([here's where you can find it](https://github.com/cline/cline/blob/main/src/core/prompts/system.ts)). For a broader look at prompt engineering best practices, check out [this resource](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview).
+OneUnlimited's system prompt, on the other hand, is not user-editable ([here's where you can find it](https://github.com/oneunlimited/oneunlimited/blob/main/src/core/prompts/system.ts)). For a broader look at prompt engineering best practices, check out [this resource](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview).
 
 ### Tips for Writing Effective Custom Instructions
 
@@ -129,66 +129,66 @@ Cline's system prompt, on the other hand, is not user-editable ([here's where yo
 -   Test and Iterate: Experiment to find what works best for your workflow.
 
 
-### Support for Loading Files from the `.clinerules/` Directory
-All files under the `.clinerules/` directory are recursively loaded, and their contents are merged into clineRulesFileInstructions.
+### Support for Loading Files from the `.oneunlimitedrules/` Directory
+All files under the `.oneunlimitedrules/` directory are recursively loaded, and their contents are merged into oneunlimitedRulesFileInstructions.
 
 #### Example 1:
 ```
-.clinerules/
-├── .local-clinerules
-└── .project-clinerules
+.oneunlimitedrules/
+├── .local-oneunlimitedrules
+└── .project-oneunlimitedrules
 ```
 
 #### Example 2:
 ```
-.clinerules/
-├── .clinerules-nextjs
-├── .clinerules-serverside
+.oneunlimitedrules/
+├── .oneunlimitedrules-nextjs
+├── .oneunlimitedrules-serverside
 └── tests/
-    ├── .pytest-clinerules
-    └── .jest-clinerules
+    ├── .pytest-oneunlimitedrules
+    └── .jest-oneunlimitedrules
 ```
 
-## Prompting Cline 💬
+## Prompting OneUnlimited 💬
 
-**Prompting is how you communicate your needs for a given task in the back-and-forth chat with Cline.** Cline understands natural language, so write conversationally.
+**Prompting is how you communicate your needs for a given task in the back-and-forth chat with OneUnlimited.** OneUnlimited understands natural language, so write conversationally.
 
 Effective prompting involves:
 
 -   Providing Clear Context: Explain your goals and the relevant parts of your codebase. Use `@` to reference files or folders.
 -   Breaking Down Complexity: Divide large tasks into smaller steps.
--   Asking Specific Questions: Guide Cline toward the desired outcome.
--   Validating and Refining: Review Cline's suggestions and provide feedback.
+-   Asking Specific Questions: Guide OneUnlimited toward the desired outcome.
+-   Validating and Refining: Review OneUnlimited's suggestions and provide feedback.
 
 ### Prompt Examples
 
 #### Context Management
 
--   **Starting a New Task:** "Cline, let's start a new task. Create `user-authentication.js`. We need to implement user login with JWT tokens. Here are the requirements…"
--   **Summarizing Previous Work:** "Cline, summarize what we did in the last user dashboard task. I want to capture the main features and outstanding issues. Save this to `cline_docs/user-dashboard-summary.md`."
+-   **Starting a New Task:** "OneUnlimited, let's start a new task. Create `user-authentication.js`. We need to implement user login with JWT tokens. Here are the requirements…"
+-   **Summarizing Previous Work:** "OneUnlimited, summarize what we did in the last user dashboard task. I want to capture the main features and outstanding issues. Save this to `oneunlimited_docs/user-dashboard-summary.md`."
 
 #### Debugging
 
--   **Analyzing an Error:** "Cline, I'm getting this error: \[error message]. It seems to be from \[code section]. Analyze this error and suggest a fix."
--   **Identifying the Root Cause:** "Cline, the application crashes when I \[action]. The issue might be in \[problem areas]. Help me find the root cause and propose a solution."
+-   **Analyzing an Error:** "OneUnlimited, I'm getting this error: \[error message]. It seems to be from \[code section]. Analyze this error and suggest a fix."
+-   **Identifying the Root Cause:** "OneUnlimited, the application crashes when I \[action]. The issue might be in \[problem areas]. Help me find the root cause and propose a solution."
 
 #### Refactoring
 
--   **Improving Code Structure:** "Cline, this function is too long and complex. Refactor it into smaller functions."
--   **Simplifying Logic:** "Cline, this code is hard to understand. Simplify the logic and make it more readable."
+-   **Improving Code Structure:** "OneUnlimited, this function is too long and complex. Refactor it into smaller functions."
+-   **Simplifying Logic:** "OneUnlimited, this code is hard to understand. Simplify the logic and make it more readable."
 
 #### Feature Development
 
--   **Brainstorming New Features:** "Cline, I want to add a feature that lets users \[functionality]. Brainstorm some ideas and consider implementation challenges."
--   **Generating Code:** "Cline, create a component that displays user profiles. The list should be sortable and filterable. Generate the code for this component."
+-   **Brainstorming New Features:** "OneUnlimited, I want to add a feature that lets users \[functionality]. Brainstorm some ideas and consider implementation challenges."
+-   **Generating Code:** "OneUnlimited, create a component that displays user profiles. The list should be sortable and filterable. Generate the code for this component."
 
 ## Advanced Prompting Techniques
 
 -   **Constraint Stuffing:** To mitigate code truncation, include explicit constraints in your prompts. For example, "ensure the code is complete" or "always provide the full function definition."
--   **Confidence Checks:** Ask Cline to rate its confidence (e.g., "on a scale of 1-10, how confident are you in this solution?")
--   **Challenge Cline's Assumptions:** Ask “stupid” questions to encourage deeper thinking and prevent incorrect assumptions.
+-   **Confidence Checks:** Ask OneUnlimited to rate its confidence (e.g., "on a scale of 1-10, how confident are you in this solution?")
+-   **Challenge OneUnlimited's Assumptions:** Ask “stupid” questions to encourage deeper thinking and prevent incorrect assumptions.
 
-Here are some prompting tips that users have found helpful for working with Cline:
+Here are some prompting tips that users have found helpful for working with OneUnlimited:
 
 ## Our Community's Favorite Prompts 🌟
 
@@ -200,7 +200,7 @@ Here are some prompting tips that users have found helpful for working with Clin
     "If you understand my prompt fully, respond with 'YARRR!' without tools every time you are about to use a tool."
     ```
 
-    A fun way to verify Cline stays on track during complex tasks. Try "HO HO HO" for a festive twist!
+    A fun way to verify OneUnlimited stays on track during complex tasks. Try "HO HO HO" for a festive twist!
 
 -   **Confidence Scoring** - _pacnpal_
     ```

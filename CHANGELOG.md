@@ -7,9 +7,9 @@
 
 ## [3.7.0]
 
--   Cline now displays selectable options when asking questions or presenting a plan, saving you from having to type out responses!
--   Add support for a `.clinerules/` directory to load multiple files at once (thanks @ryo-ma!)
--   Prevent Cline from reading extremely large files into context that would overload context window
+-   OneUnlimited now displays selectable options when asking questions or presenting a plan, saving you from having to type out responses!
+-   Add support for a `.oneunlimitedrules/` directory to load multiple files at once (thanks @ryo-ma!)
+-   Prevent OneUnlimited from reading extremely large files into context that would overload context window
 -   Improve checkpoints loading performance and display warning for large projects not suited for checkpoints
 -   Add SambaNova API provider (thanks @saad-noodleseed!)
 -   Add VPC endpoint option for AWS Bedrock profiles (thanks @minorunara!)
@@ -31,11 +31,11 @@
 
 ## [3.6.0]
 
--   Add Cline API as a provider option, allowing new users to sign up and get started with Cline for free
+-   Add OneUnlimited API as a provider option, allowing new users to sign up and get started with OneUnlimited for free
 -   Optimize checkpoints with branch-per-task strategy, reducing storage required and first task load times
 -   Fix problem with Plan/Act toggle keyboard shortcut not working in Windows (thanks @yt3trees!)
 -   Add new Gemini models to GCP Vertex (thanks @shohei-ihaya!) and Claude models AskSage (thanks @swhite24!)
--   Improve OpenRouter/Cline error reporting
+-   Improve OpenRouter/OneUnlimited error reporting
 
 ## [3.5.1]
 
@@ -87,7 +87,7 @@
 
 ## [3.3.0]
 
--   Add .clineignore to block Cline from accessing specified file patterns
+-   Add .oneunlimitedignore to block OneUnlimited from accessing specified file patterns
 -   Add keyboard shortcut + tooltips for Plan/Act toggle
 -   Fix bug where new files won't show up in files dropdown
 -   Add automatic retry for rate limited requests (thanks @ViezeVingertjes!)
@@ -137,7 +137,7 @@
 
 ## [3.2.0]
 
--   Add Plan/Act mode toggle to let you plan tasks with Cline before letting him get to work
+-   Add Plan/Act mode toggle to let you plan tasks with OneUnlimited before letting him get to work
 -   Easily switch between API providers and models using a new popup menu under the chat field
 -   Add VS Code LM API provider to run models provided by other VS Code extensions (e.g. GitHub Copilot). Shoutout to @julesmons, @RaySinner, and @MrUbens for putting this together!
 -   Add on/off toggle for MCP servers to disable them when not in use. Thanks @MrUbens!
@@ -153,7 +153,7 @@
 
 ## [3.1.7]
 
--   Add ability to change viewport size and headless mode when Cline asks to launch the browser
+-   Add ability to change viewport size and headless mode when OneUnlimited asks to launch the browser
 
 ## [3.1.6]
 
@@ -162,7 +162,7 @@
 
 ## [3.1.5]
 
--   Fix bug where Cline couldn't read "@/" import path aliases from tool results
+-   Fix bug where OneUnlimited couldn't read "@/" import path aliases from tool results
 
 ## [3.1.4]
 
@@ -174,7 +174,7 @@
 
 ## [3.1.0]
 
--   Added checkpoints: Snapshots of workspace are automatically created whenever Cline uses a tool
+-   Added checkpoints: Snapshots of workspace are automatically created whenever OneUnlimited uses a tool
     -   Compare changes: Hover over any tool use to see a diff between the snapshot and current workspace state
     -   Restore options: Choose to restore just the task state, just the workspace files, or both
 -   New 'See new changes' button appears after task completion, providing an overview of all workspace changes
@@ -226,16 +226,16 @@
 
 ## [3.0.0]
 
--   Cline now uses a search & replace diff based approach when editing large files to prevent code deletion issues.
+-   OneUnlimited now uses a search & replace diff based approach when editing large files to prevent code deletion issues.
 -   Adds support for a more comprehensive auto-approve configuration, allowing you to specify which tools require approval and which don't.
--   Adds ability to enable system notifications for when Cline needs approval or completes a task.
--   Adds support for a root-level `.clinerules` file that can be used to specify custom instructions for the project.
+-   Adds ability to enable system notifications for when OneUnlimited needs approval or completes a task.
+-   Adds support for a root-level `.oneunlimitedrules` file that can be used to specify custom instructions for the project.
 
 ## [2.2.0]
 
--   Add support for Model Context Protocol (MCP), enabling Cline to use custom tools like web-search tool or GitHub tool
+-   Add support for Model Context Protocol (MCP), enabling OneUnlimited to use custom tools like web-search tool or GitHub tool
 -   Add MCP server management tab accessible via the server icon in the menu bar
--   Add ability for Cline to dynamically create new MCP servers based on user requests (e.g., "add a tool that gets the latest npm docs")
+-   Add ability for OneUnlimited to dynamically create new MCP servers based on user requests (e.g., "add a tool that gets the latest npm docs")
 
 ## [2.1.6]
 
@@ -260,11 +260,11 @@
 
 ## [2.1.1]
 
--   Add stricter prompt to prevent Cline from editing files during a browser session without first closing the browser
+-   Add stricter prompt to prevent OneUnlimited from editing files during a browser session without first closing the browser
 
 ## [2.1.0]
 
--   Cline now uses Anthropic's new "Computer Use" feature to launch a browser, click, type, and scroll. This gives him more autonomy in runtime debugging, end-to-end testing, and even general web use. Try asking "Look up the weather in Colorado" to see it in action! (Available with Claude 3.5 Sonnet v2)
+-   OneUnlimited now uses Anthropic's new "Computer Use" feature to launch a browser, click, type, and scroll. This gives him more autonomy in runtime debugging, end-to-end testing, and even general web use. Try asking "Look up the weather in Colorado" to see it in action! (Available with Claude 3.5 Sonnet v2)
 
 ## [2.0.19]
 
@@ -284,7 +284,7 @@
 
 ## [2.0.15]
 
--   Fix bug where modifying Cline's edits would lead him to try to re-apply the edits
+-   Fix bug where modifying OneUnlimited's edits would lead him to try to re-apply the edits
 -   Fix bug where weaker models would display file contents before using the write_to_file tool
 -   Fix o1-mini and o1-preview errors when using OpenAI native
 
@@ -310,7 +310,7 @@
 
 ## [2.0.9]
 
--   Update system prompt to try to prevent Cline from lazy coding (`// rest of code here...`)
+-   Update system prompt to try to prevent OneUnlimited from lazy coding (`// rest of code here...`)
 
 ## [2.0.8]
 
@@ -323,19 +323,19 @@
 
 ## [2.0.6]
 
--   Update URLs to https://github.com/cline/cline
+-   Update URLs to https://github.com/oneunlimited/oneunlimited
 
 ## [2.0.5]
 
--   Fixed bug where Cline's edits would stream into the active tab when switching tabs during a write_to_file
+-   Fixed bug where OneUnlimited's edits would stream into the active tab when switching tabs during a write_to_file
 -   Added explanation in task continuation prompt that an interrupted write_to_file reverts the file to its original contents, preventing unnecessary re-reads
 -   Fixed non-first chunk error handling in case stream fails mid-way through
 
 ## [2.0.0]
 
--   New name! Meet Cline, an AI assistant that can use your CLI and Editor
--   Responses are now streamed with a yellow text decoration animation to keep track of Cline's progress as he edits files
--   New Cancel button to give Cline feedback if he goes off in the wrong direction, giving you more control over tasks
+-   New name! Meet OneUnlimited, an AI assistant that can use your CLI and Editor
+-   Responses are now streamed with a yellow text decoration animation to keep track of OneUnlimited's progress as he edits files
+-   New Cancel button to give OneUnlimited feedback if he goes off in the wrong direction, giving you more control over tasks
 -   Re-imagined tool calling prompt resulting in ~40% fewer requests to accomplish tasks + better performance with other models
 -   Search and use any model with OpenRouter
 

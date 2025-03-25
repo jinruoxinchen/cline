@@ -4,7 +4,12 @@ import React, { memo, useEffect, useMemo, useRef, useState } from "react"
 import { useSize } from "react-use"
 import styled from "styled-components"
 import { BROWSER_VIEWPORT_PRESETS } from "../../../../src/shared/BrowserSettings"
-import { BrowserAction, BrowserActionResult, ClineMessage, ClineSayBrowserAction } from "../../../../src/shared/ExtensionMessage"
+import {
+	BrowserAction,
+	BrowserActionResult,
+	OneUnlimitedMessage,
+	OneUnlimitedSayBrowserAction,
+} from "../../../../src/shared/ExtensionMessage"
 import { useExtensionState } from "../../context/ExtensionStateContext"
 import { vscode } from "../../utils/vscode"
 import { BrowserSettingsMenu } from "../browser/BrowserSettingsMenu"
@@ -13,10 +18,10 @@ import CodeBlock, { CODE_BLOCK_BG_COLOR } from "../common/CodeBlock"
 import { ChatRowContent, ProgressIndicator } from "./ChatRow"
 
 interface BrowserSessionRowProps {
-	messages: ClineMessage[]
+	messages: OneUnlimitedMessage[]
 	isExpanded: (messageTs: number) => boolean
 	onToggleExpand: (messageTs: number) => void
-	lastModifiedMessage?: ClineMessage
+	lastModifiedMessage?: OneUnlimitedMessage
 	isLast: boolean
 	onHeightChange: (isTaller: boolean) => void
 }
@@ -56,15 +61,15 @@ const BrowserSessionRow = memo((props: BrowserSessionRowProps) => {
 				screenshot?: string
 				mousePosition?: string
 				consoleLogs?: string
-				messages: ClineMessage[] // messages up to and including the result
+				messages: OneUnlimitedMessage[] // messages up to and including the result
 			}
 			nextAction?: {
-				messages: ClineMessage[] // messages leading to next result
+				messages: OneUnlimitedMessage[] // messages leading to next result
 			}
 		}[] = []
 
-		let currentStateMessages: ClineMessage[] = []
-		let nextActionMessages: ClineMessage[] = []
+		let currentStateMessages: OneUnlimitedMessage[] = []
+		let nextActionMessages: OneUnlimitedMessage[] = []
 
 		messages.forEach((message) => {
 			if (message.ask === "browser_action_launch" || message.say === "browser_action_launch") {
@@ -218,7 +223,7 @@ const BrowserSessionRow = memo((props: BrowserSessionRowProps) => {
 		for (let i = actions.length - 1; i >= 0; i--) {
 			const message = actions[i]
 			if (message.say === "browser_action") {
-				const browserAction = JSON.parse(message.text || "{}") as ClineSayBrowserAction
+				const browserAction = JSON.parse(message.text || "{}") as OneUnlimitedSayBrowserAction
 				if (browserAction.action === "click" && browserAction.coordinate) {
 					return browserAction.coordinate
 				}
@@ -263,7 +268,7 @@ const BrowserSessionRow = memo((props: BrowserSessionRowProps) => {
 						}}></span>
 				)}
 				<span style={{ fontWeight: "bold" }}>
-					<>{isAutoApproved ? "Cline is using the browser:" : "Cline wants to use the browser:"}</>
+					<>{isAutoApproved ? "OneUnlimited is using the browser:" : "OneUnlimited wants to use the browser:"}</>
 				</span>
 			</div>
 			<div
@@ -441,7 +446,7 @@ const BrowserSessionRow = memo((props: BrowserSessionRowProps) => {
 }, deepEqual)
 
 interface BrowserSessionRowContentProps extends Omit<BrowserSessionRowProps, "messages"> {
-	message: ClineMessage
+	message: OneUnlimitedMessage
 	setMaxActionHeight: (height: number) => void
 }
 
@@ -502,7 +507,7 @@ const BrowserSessionRowContent = ({
 					)
 
 				case "browser_action":
-					const browserAction = JSON.parse(message.text || "{}") as ClineSayBrowserAction
+					const browserAction = JSON.parse(message.text || "{}") as OneUnlimitedSayBrowserAction
 					return (
 						<BrowserActionBox
 							action={browserAction.action}

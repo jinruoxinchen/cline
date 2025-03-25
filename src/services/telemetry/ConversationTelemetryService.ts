@@ -6,7 +6,7 @@ import { NodeTracerProvider } from "@opentelemetry/sdk-trace-node"
 import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION } from "@opentelemetry/semantic-conventions"
 import { Anthropic } from "@anthropic-ai/sdk"
 import * as vscode from "vscode"
-import { ClineProvider } from "../../core/webview/ClineProvider"
+import { OneUnlimitedProvider } from "../../core/webview/OneUnlimitedProvider"
 
 export type TelemetryChatMessage = {
 	role: "user" | "assistant" | "system"
@@ -27,25 +27,25 @@ interface ConversationMetadata {
  * Service for collecting conversation data using OpenTelemetry
  */
 export class ConversationTelemetryService {
-	private providerRef: WeakRef<ClineProvider>
+	private providerRef: WeakRef<OneUnlimitedProvider>
 	private distinctId: string = vscode.env.machineId
-	private apiEndpoint: string = "https://api.cline.bot/v1/traces"
+	private apiEndpoint: string = "https://api.oneunlimited.bot/v1/traces"
 	private tracerProvider: NodeTracerProvider | undefined
 	private tracer: any
 	private messageIndices: Map<string, number> = new Map()
 
-	constructor(provider: ClineProvider) {
+	constructor(provider: OneUnlimitedProvider) {
 		this.providerRef = new WeakRef(provider)
 		this.initializeTracer()
 	}
 
-	private async getClineApiKey(): Promise<string | undefined> {
+	private async getOneUnlimitedApiKey(): Promise<string | undefined> {
 		const provider = this.providerRef.deref()
 		if (!provider) {
 			return undefined
 		}
 		const { apiConfiguration } = await provider.getStateToPostToWebview()
-		return apiConfiguration?.clineApiKey
+		return apiConfiguration?.oneunlimitedApiKey
 	}
 
 	public isOptedInToConversationTelemetry(): boolean {
@@ -55,7 +55,7 @@ export class ConversationTelemetryService {
 
 		// User has to manually opt in to conversation telemetry in Advanced Settings
 		const isConversationTelemetryEnabled =
-			vscode.workspace.getConfiguration("cline").get<boolean>("conversationTelemetry") ?? false
+			vscode.workspace.getConfiguration("oneunlimited").get<boolean>("conversationTelemetry") ?? false
 
 		// Currently only enabled in dev environment
 		const isDevEnvironment = !!IS_DEV
@@ -67,11 +67,11 @@ export class ConversationTelemetryService {
 		try {
 			// Create a resource that identifies our service
 			const resource = new Resource({
-				[ATTR_SERVICE_NAME]: "cline-extension",
+				[ATTR_SERVICE_NAME]: "oneunlimited-extension",
 				[ATTR_SERVICE_VERSION]: "1.0.0",
 			})
 
-			const clineApiKey = await this.getClineApiKey()
+			const oneunlimitedApiKey = await this.getOneUnlimitedApiKey()
 
 			console.log("[ConversationTelemetry] Initializing OpenTelemetry tracer...")
 
@@ -81,8 +81,8 @@ export class ConversationTelemetryService {
 			}
 
 			// Add API key to headers if available
-			if (clineApiKey) {
-				headers["Authorization"] = `Bearer ${clineApiKey}`
+			if (oneunlimitedApiKey) {
+				headers["Authorization"] = `Bearer ${oneunlimitedApiKey}`
 			}
 
 			const exporter = new OTLPTraceExporter({
@@ -103,7 +103,7 @@ export class ConversationTelemetryService {
 			this.tracerProvider.register()
 
 			// Get a tracer
-			this.tracer = trace.getTracer("cline-conversation-tracer")
+			this.tracer = trace.getTracer("oneunlimited-conversation-tracer")
 
 			console.log("[ConversationTelemetry] OpenTelemetry tracer initialized successfully")
 		} catch (error) {
@@ -255,8 +255,8 @@ export class ConversationTelemetryService {
 			return
 		}
 
-		const clineApiKey = await this.getClineApiKey()
-		if (!clineApiKey) {
+		const oneunlimitedApiKey = await this.getOneUnlimitedApiKey()
+		if (!oneunlimitedApiKey) {
 			return
 		}
 
@@ -267,7 +267,7 @@ export class ConversationTelemetryService {
 			}
 
 			// Add API key to headers
-			headers["Authorization"] = `Bearer ${clineApiKey}`
+			headers["Authorization"] = `Bearer ${oneunlimitedApiKey}`
 
 			// Send the data to the cleanup endpoint
 			const cleanupEndpoint = `${this.apiEndpoint.replace("/traces", "/traces/cleanup")}`

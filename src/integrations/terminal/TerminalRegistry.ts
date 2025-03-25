@@ -16,8 +16,9 @@ export class TerminalRegistry {
 	static createTerminal(cwd?: string | vscode.Uri | undefined): TerminalInfo {
 		const terminal = vscode.window.createTerminal({
 			cwd,
-			name: "Cline",
-			iconPath: new vscode.ThemeIcon("robot"),
+			name: "OneUnlimited",
+			// @ts-ignore - Constructor is private in types but public in runtime
+			iconPath: new vscode.ThemeIcon("debug-alt"),
 		})
 		const newInfo: TerminalInfo = {
 			terminal,
