@@ -14,6 +14,6 @@ import * as path from "path"
  */
 export function getUri(webview: vscode.Webview, extensionUri: vscode.Uri, pathList: string[]) {
 	// 使用 path.join 组合路径，然后用 Uri.file 创建URI
-	const pathOnDisk = path.join(extensionUri.fsPath, ...pathList);
-	return webview.asWebviewUri(vscode.Uri.file(pathOnDisk));
+	const pathOnDisk = path.join(extensionUri.fsPath, ...pathList)
+	return webview.asWebviewUri(vscode.Uri.file(pathOnDisk))
 }

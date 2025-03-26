@@ -945,10 +945,10 @@ export class OneUnlimitedProvider implements vscode.WebviewViewProvider {
 		const didSwitchToActMode = chatSettings.mode === "act"
 
 		// Capture mode switch telemetry | Capture regardless of if we know the taskId
-  telemetryService.captureModeSwitch(
-    this.oneunlimited?.taskId ?? "0", 
-    chatSettings.mode === 'unlimited' ? 'act' : chatSettings.mode
-  )
+		telemetryService.captureModeSwitch(
+			this.oneunlimited?.taskId ?? "0",
+			chatSettings.mode === "unlimited" ? "act" : chatSettings.mode,
+		)
 
 		// Get previous model info that we will revert to after saving current mode api info
 		const {

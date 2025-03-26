@@ -109,22 +109,22 @@ export class OneUnlimitedIgnoreController {
 	 */
 	filterPaths(paths: string[]): string[] {
 		if (!this.oneunlimitedIgnoreContent) {
-			return paths;
+			return paths
 		}
 
-		return paths.filter(filePath => {
+		return paths.filter((filePath) => {
 			try {
 				// Normalize path to be relative to cwd and use forward slashes
-				const absolutePath = path.resolve(this.cwd, filePath);
-				const relativePath = path.relative(this.cwd, absolutePath).replace(/\\/g, "/");
+				const absolutePath = path.resolve(this.cwd, filePath)
+				const relativePath = path.relative(this.cwd, absolutePath).replace(/\\/g, "/")
 
 				// Ignore expects paths to be path.relative()'d
-				return !this.ignoreInstance.ignores(relativePath);
+				return !this.ignoreInstance.ignores(relativePath)
 			} catch (error) {
 				// For paths that can't be resolved relative to cwd, we allow access
-				return true;
+				return true
 			}
-		});
+		})
 	}
 
 	/**
@@ -136,7 +136,7 @@ export class OneUnlimitedIgnoreController {
 	validateCommand(command: string): string | false {
 		// TODO: Implement command validation logic
 		// For now, just return false (allowed) since we don't have command filtering yet
-		return false;
+		return false
 	}
 
 	/**

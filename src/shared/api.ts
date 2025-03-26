@@ -1376,6 +1376,6 @@ export const oneunlimitedModels = {
 		supportsPromptCache: false,
 		inputPrice: 0,
 		outputPrice: 0,
-		description: "OneUnlimited模拟模型，用于测试目的"
-	}
+		description: "OneUnlimited模拟模型，用于测试目的",
+	},
 } as const satisfies Record<string, ModelInfo>

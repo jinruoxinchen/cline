@@ -2485,11 +2485,7 @@ export class OneUnlimited {
 								const blockedPath = this.oneunlimitedIgnoreController.validateCommand(command)
 								if (blockedPath !== false) {
 									await this.say("oneunlimitedignore_error", blockedPath)
-									pushToolResult(
-										formatResponse.toolError(
-											formatResponse.oneunlimitedIgnoreError(blockedPath),
-										),
-									)
+									pushToolResult(formatResponse.toolError(formatResponse.oneunlimitedIgnoreError(blockedPath)))
 
 									break
 								}
