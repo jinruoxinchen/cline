@@ -103,13 +103,40 @@ export class OneUnlimitedIgnoreController {
 	}
 
 	/**
+	 * Filter a list of paths, removing any that should be ignored
+	 * @param paths - List of paths to filter (can be absolute or relative)
+	 * @returns Array of accessible paths
+	 */
+	filterPaths(paths: string[]): string[] {
+		if (!this.oneunlimitedIgnoreContent) {
+			return paths;
+		}
+
+		return paths.filter(filePath => {
+			try {
+				// Normalize path to be relative to cwd and use forward slashes
+				const absolutePath = path.resolve(this.cwd, filePath);
+				const relativePath = path.relative(this.cwd, absolutePath).replace(/\\/g, "/");
+
+				// Ignore expects paths to be path.relative()'d
+				return !this.ignoreInstance.ignores(relativePath);
+			} catch (error) {
+				// For paths that can't be resolved relative to cwd, we allow access
+				return true;
+			}
+		});
+	}
+
+	/**
 	 * Check if a terminal command or configuration is allowed
 	 * Placeholder method for future implementation of command filtering
-	 * @returns boolean indicating if the command or configuration is permitted
+	 * @param command - Command string to validate
+	 * @returns string with the path that was blocked, or false if command is allowed
 	 */
-	validateCommand(): boolean {
+	validateCommand(command: string): string | false {
 		// TODO: Implement command validation logic
-		return true
+		// For now, just return false (allowed) since we don't have command filtering yet
+		return false;
 	}
 
 	/**

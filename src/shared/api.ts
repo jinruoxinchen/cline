@@ -1364,3 +1364,18 @@ export const sambanovaModels = {
 		outputPrice: 0,
 	},
 } as const satisfies Record<string, ModelInfo>
+
+// OneUnlimited
+export type OneUnlimitedModelId = keyof typeof oneunlimitedModels
+export const oneunlimitedDefaultModelId: OneUnlimitedModelId = "oneunlimited-test-model"
+export const oneunlimitedModels = {
+	"oneunlimited-test-model": {
+		maxTokens: 8192,
+		contextWindow: 128_000,
+		supportsImages: false,
+		supportsPromptCache: false,
+		inputPrice: 0,
+		outputPrice: 0,
+		description: "OneUnlimited模拟模型，用于测试目的"
+	}
+} as const satisfies Record<string, ModelInfo>

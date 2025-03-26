@@ -24,6 +24,7 @@ export class FullStackDeveloperAgent extends BaseAgent {
 
 	async executeStep(step: TaskStep): Promise<ToolResult> {
 		return {
+			agentId: this.config.id,
 			success: true,
 			message: `Step ${step.id} executed by Full Stack Developer`,
 			output: JSON.stringify({ step, timestamp: Date.now() }),

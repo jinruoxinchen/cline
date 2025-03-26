@@ -41,6 +41,7 @@ export interface TaskPlan {
 }
 
 export interface ToolResult {
+  agentId: string;
 	success: boolean
 	message: string
 	output: string

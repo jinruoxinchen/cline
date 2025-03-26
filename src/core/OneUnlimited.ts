@@ -2482,12 +2482,12 @@ export class OneUnlimited {
 								}
 								this.consecutiveMistakeCount = 0
 
-								const ignoredFileAttemptedToAccess = this.oneunlimitedIgnoreController.validateCommand(command)
-								if (ignoredFileAttemptedToAccess) {
-									await this.say("oneunlimitedignore_error", ignoredFileAttemptedToAccess)
+								const blockedPath = this.oneunlimitedIgnoreController.validateCommand(command)
+								if (blockedPath !== false) {
+									await this.say("oneunlimitedignore_error", blockedPath)
 									pushToolResult(
 										formatResponse.toolError(
-											formatResponse.oneunlimitedIgnoreError(ignoredFileAttemptedToAccess),
+											formatResponse.oneunlimitedIgnoreError(blockedPath),
 										),
 									)
 
